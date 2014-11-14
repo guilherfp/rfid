@@ -1,0 +1,90 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>br.com.devsource</groupId>
+  <artifactId>dev-rfid-parent</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>Devsource RFID Parent </name>
+
+  <organization>
+    <name>DevSource</name>
+    <url>http://devsource.com.br</url>
+  </organization>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <utilitario.version>1.1.1</utilitario.version>
+    <dev.rfid.version>0.0.1-SNAPSHOT</dev.rfid.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>br.com.devsource</groupId>
+        <artifactId>utilitario</artifactId>
+        <version>${utilitario.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <extensions>
+      <extension>
+        <groupId>org.apache.maven.wagon</groupId>
+        <artifactId>wagon-webdav-jackrabbit</artifactId>
+        <version>2.2</version>
+      </extension>
+    </extensions>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>2.6</version>
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <version>2.1.2</version>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+          <encoding>UTF-8</encoding>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <distributionManagement>
+    <repository>
+      <id>devsource.internal</id>
+      <name>DevSource Repository Internal</name>
+      <url>dav:http://devsource.com.br:8888/repository/internal/</url>
+    </repository>
+    <snapshotRepository>
+      <id>devsource.snapshots</id>
+      <name>DevSource Repository Snapshots</name>
+      <url>dav:http://devsource.com.br:8888/repository/snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+</project>
