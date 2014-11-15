@@ -12,4 +12,11 @@
   <name>Devsource RFID Parent </name>
   <description>Gerenciador de EPC RFID Devsource</description>
 
+  <dependencies>
+    <dependency>
+      <groupId>br.com.devsource</groupId>
+      <artifactId>dev-rfid</artifactId>
+      <version>0.0.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
 </project>

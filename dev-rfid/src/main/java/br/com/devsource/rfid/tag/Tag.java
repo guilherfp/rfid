@@ -2,7 +2,7 @@ package br.com.devsource.rfid.tag;
 
 import org.apache.commons.lang3.Validate;
 
-public class Tag {
+public final class Tag {
 
   private String epc;
 
