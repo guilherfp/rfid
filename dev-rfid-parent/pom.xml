@@ -9,6 +9,11 @@
 
   <name>Devsource RFID Parent </name>
 
+  <modules>
+    <module>../dev-rfid</module>
+    <module>../dev-rfid-epc</module>
+  </modules>
+
   <organization>
     <name>DevSource</name>
     <url>http://devsource.com.br</url>

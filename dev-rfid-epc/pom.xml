@@ -9,7 +9,7 @@
     <artifactId>dev-rfid-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <name>Devsource RFID Parent </name>
+  <name>Devsource RFID EPC</name>
   <description>Gerenciador de EPC RFID Devsource</description>
 
   <dependencies>
