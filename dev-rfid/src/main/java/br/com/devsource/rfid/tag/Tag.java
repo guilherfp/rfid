@@ -1,20 +1,35 @@
 package br.com.devsource.rfid.tag;
 
+import java.io.Serializable;
+
 import org.apache.commons.lang3.Validate;
 
-public final class Tag {
+public final class Tag implements Comparable<Tag>, Serializable {
+  private static final long serialVersionUID = 4941722287359138768L;
 
   private String epc;
+  private String userMemory = "";
 
   Tag() {}
 
-  public Tag(String epc) {
+  public Tag(String epc, String userMemory) {
     Validate.notBlank(epc);
     this.epc = epc.toUpperCase();
+    if (userMemory != null) {
+      this.userMemory = userMemory;
+    }
+  }
+
+  public Tag(String epc) {
+    this(epc, "");
   }
 
   public String getEpc() {
     return epc;
+  }
+
+  public String getUserMemory() {
+    return userMemory;
   }
 
   @Override
@@ -32,6 +47,11 @@ public final class Tag {
     }
     Tag other = (Tag) obj;
     return epc.equals(other.epc);
+  }
+
+  @Override
+  public int compareTo(Tag o) {
+    return epc.compareTo(o.epc);
   }
 
   @Override

@@ -1,6 +1,7 @@
-package br.com.devsource.rfid;
+package br.com.devsource.rfid.leitor;
 
 public enum Protocolo {
 
   LLRP;
+
 }

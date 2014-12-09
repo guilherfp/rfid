@@ -1,13 +1,15 @@
 package br.com.devsource.rfid;
 
+import br.com.devsource.rfid.event.RfidHandler;
+
 public interface RfidReader extends RfidModule {
 
   void start();
 
   void stop();
 
-  void addReaderEvent(RfidEvent event);
+  void addHandler(RfidHandler event);
 
-  void removeReaderEvent(RfidEvent event);
+  void removeHandler(RfidHandler event);
 
 }
