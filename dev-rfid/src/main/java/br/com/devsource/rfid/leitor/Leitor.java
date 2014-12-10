@@ -3,7 +3,7 @@ package br.com.devsource.rfid.leitor;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public interface Leitor {
+public interface Leitor extends Comparable<Leitor> {
 
   String hotName();
 

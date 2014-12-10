@@ -1,6 +1,6 @@
 package br.com.devsource.rfid.leitor;
 
-public interface Antena {
+public interface Antena extends Comparable<Antena> {
 
   int numero();
 

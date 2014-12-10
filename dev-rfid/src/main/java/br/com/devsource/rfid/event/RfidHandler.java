@@ -1,6 +1,6 @@
 package br.com.devsource.rfid.event;
 
-import br.com.devsource.rfid.RfidModule;
+import br.com.devsource.rfid.reader.RfidModule;
 
 @FunctionalInterface
 public interface RfidHandler {

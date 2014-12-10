@@ -18,6 +18,16 @@
       <artifactId>commons-lang3</artifactId>
       <version>3.3.2</version>
     </dependency>
+    <dependency>
+      <groupId>org.llrp.ltk</groupId>
+      <artifactId>llrp-toolkit</artifactId>
+      <version>1.0.0.7</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.7</version>
+    </dependency>
   </dependencies>
 
 </project>
