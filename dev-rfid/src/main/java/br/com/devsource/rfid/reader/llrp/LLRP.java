@@ -23,6 +23,7 @@ import org.llrp.ltk.generated.parameters.AntennaConfiguration;
 import org.llrp.ltk.generated.parameters.C1G2EPCMemorySelector;
 import org.llrp.ltk.generated.parameters.EPC_96;
 import org.llrp.ltk.generated.parameters.InventoryParameterSpec;
+import org.llrp.ltk.generated.parameters.RFReceiver;
 import org.llrp.ltk.generated.parameters.RFTransmitter;
 import org.llrp.ltk.generated.parameters.ROBoundarySpec;
 import org.llrp.ltk.generated.parameters.ROReportSpec;
@@ -50,24 +51,22 @@ import br.com.devsource.rfid.tag.Tag;
 
 public class LLRP extends AbstractRfid implements LLRPEndpoint {
 
-  private static final int TIME_OUT = 6000;
+  private static final int TIME_OUT = 10 * 1000;
   private final LLRPConnector connector;
+  private final UnsignedInteger ROSPEC_ID = new UnsignedInteger(101);
 
-  protected final UnsignedInteger ROSPEC_ID;
-
-  protected static final Bit NO = new Bit(0);
-  protected static final Bit YES = new Bit(1);
+  private static final Bit NO = new Bit(0);
+  private static final Bit YES = new Bit(1);
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LLRP.class);
 
   protected LLRP(Leitor leitor) {
     super(leitor);
-    if (leitor.porta() != 0) {
+    if (leitor.porta() == 0) {
       connector = new LLRPConnector(this, leitor.hotName());
     } else {
       connector = new LLRPConnector(this, leitor.hotName(), leitor.porta());
     }
-    ROSPEC_ID = new UnsignedInteger();
   }
 
   private void connect() throws LLRPConnectionAttemptFailedException {
@@ -77,19 +76,19 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   }
 
   private void enableROSpec() throws TimeoutException {
-    ENABLE_ROSPEC rospec = new ENABLE_ROSPEC();
+    final ENABLE_ROSPEC rospec = new ENABLE_ROSPEC();
     rospec.setROSpecID(ROSPEC_ID);
     transact(rospec);
   }
 
   private void deleteROSpec() throws TimeoutException {
-    DELETE_ROSPEC rospec = new DELETE_ROSPEC();
+    final DELETE_ROSPEC rospec = new DELETE_ROSPEC();
     rospec.setROSpecID(ROSPEC_ID);
     transact(rospec);
   }
 
   private UnsignedShortArray getIDAntennas() {
-    UnsignedShortArray array = new UnsignedShortArray();
+    final UnsignedShortArray array = new UnsignedShortArray();
     leitor().antenasAtivas().forEach(antena -> array.add(new UnsignedShort(antena.numero())));
     return array;
   }
@@ -99,7 +98,7 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   }
 
   private ROReportSpec getReportSpec() {
-    ROReportSpec reportSpec = new ROReportSpec();
+    final ROReportSpec reportSpec = new ROReportSpec();
     reportSpec.setROReportTrigger(new ROReportTriggerType(ROReportTriggerType.Upon_N_Tags_Or_End_Of_ROSpec));
     reportSpec.setN(new UnsignedShort(1));
     reportSpec.setTagReportContentSelector(getTagReportSelector());
@@ -107,7 +106,7 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   }
 
   private void addROSpec() throws TimeoutException {
-    ROSpec roSpec = new ROSpec();
+    final ROSpec roSpec = new ROSpec();
     roSpec.setROSpecID(ROSPEC_ID);
     roSpec.setPriority(new UnsignedByte(0));
     roSpec.setCurrentState(new ROSpecState(ROSpecState.Disabled));
@@ -120,7 +119,7 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   }
 
   private TagReportContentSelector getTagReportSelector() {
-    TagReportContentSelector selector = new TagReportContentSelector();
+    final TagReportContentSelector selector = new TagReportContentSelector();
     selector.setEnableAccessSpecID(YES);
     selector.setEnableAntennaID(YES);
     selector.setEnableChannelIndex(NO);
@@ -131,8 +130,8 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
     selector.setEnableROSpecID(NO);
     selector.setEnableSpecIndex(NO);
     selector.setEnableTagSeenCount(NO);
-    List<AirProtocolEPCMemorySelector> airProtocolList = selector.getAirProtocolEPCMemorySelectorList();
-    C1G2EPCMemorySelector memorySelector = new C1G2EPCMemorySelector();
+    final List<AirProtocolEPCMemorySelector> airProtocolList = selector.getAirProtocolEPCMemorySelectorList();
+    final C1G2EPCMemorySelector memorySelector = new C1G2EPCMemorySelector();
     memorySelector.setEnableCRC(NO);
     memorySelector.setEnablePCBits(NO);
     airProtocolList.add(memorySelector);
@@ -141,8 +140,8 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   }
 
   private AISpec getAiSpec() {
-    AISpec aiSpec = new AISpec();
-    AISpecStopTrigger aiSpecStopTrigger = new AISpecStopTrigger();
+    final AISpec aiSpec = new AISpec();
+    final AISpecStopTrigger aiSpecStopTrigger = new AISpecStopTrigger();
     aiSpecStopTrigger.setAISpecStopTriggerType(new AISpecStopTriggerType(AISpecStopTriggerType.Null));
     aiSpecStopTrigger.setDurationTrigger(new UnsignedInteger(0));
     aiSpec.setAISpecStopTrigger(aiSpecStopTrigger);
@@ -152,62 +151,70 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   }
 
   private InventoryParameterSpec getInventoryParameter() {
-    InventoryParameterSpec inventoryParameterSpec = new InventoryParameterSpec();
+    final InventoryParameterSpec inventoryParameterSpec = new InventoryParameterSpec();
     inventoryParameterSpec.setProtocolID(new AirProtocols(AirProtocols.EPCGlobalClass1Gen2));
     inventoryParameterSpec.setInventoryParameterSpecID(new UnsignedShort(1));
     return inventoryParameterSpec;
   }
 
   private ROBoundarySpec getBoundarySpec() {
-    ROBoundarySpec boundarySpec = new ROBoundarySpec();
+    final ROBoundarySpec boundarySpec = new ROBoundarySpec();
     boundarySpec.setROSpecStartTrigger(getStartTrigger());
     boundarySpec.setROSpecStopTrigger(getStopTrigger());
     return boundarySpec;
   }
 
   private ROSpecStopTrigger getStopTrigger() {
-    ROSpecStopTrigger stopTrigger = new ROSpecStopTrigger();
+    final ROSpecStopTrigger stopTrigger = new ROSpecStopTrigger();
     stopTrigger.setDurationTriggerValue(new UnsignedInteger(0));
     stopTrigger.setROSpecStopTriggerType(new ROSpecStopTriggerType(ROSpecStopTriggerType.Null));
     return stopTrigger;
   }
 
   private ROSpecStartTrigger getStartTrigger() {
-    ROSpecStartTrigger startTrigger = new ROSpecStartTrigger();
+    final ROSpecStartTrigger startTrigger = new ROSpecStartTrigger();
     startTrigger.setROSpecStartTriggerType(new ROSpecStartTriggerType(ROSpecStartTriggerType.Null));
     return startTrigger;
   }
 
   private void startSpec() throws TimeoutException {
-    START_ROSPEC message = new START_ROSPEC();
+    final START_ROSPEC message = new START_ROSPEC();
     message.setROSpecID(ROSPEC_ID);
     transact(message);
   }
 
   private void stopSpec() throws TimeoutException {
-    STOP_ROSPEC message = new STOP_ROSPEC();
+    final STOP_ROSPEC message = new STOP_ROSPEC();
     message.setROSpecID(ROSPEC_ID);
     transact(message);
   }
 
   private AntennaConfiguration configuracaoDaAntena(Antena antena) {
-    AntennaConfiguration antennaConfig = new AntennaConfiguration();
-    antennaConfig.setAntennaID(new UnsignedShort(antena.numero()));
-    RFTransmitter transmitter = new RFTransmitter();
+    final AntennaConfiguration config = new AntennaConfiguration();
+    config.setAntennaID(new UnsignedShort(antena.numero()));
+    final RFReceiver receiver = new RFReceiver();
+    receiver.setReceiverSensitivity(sensibilidadeLLRP(100));
+    config.setRFReceiver(receiver);
+    final RFTransmitter transmitter = new RFTransmitter();
     transmitter.setTransmitPower(potenciaLLRP(antena.potencia()));
+    transmitter.setChannelIndex(new UnsignedShort(0));
     transmitter.setHopTableID(new UnsignedShort(0));
-    antennaConfig.setRFTransmitter(transmitter);
-    return antennaConfig;
+    config.setRFTransmitter(transmitter);
+    return config;
+  }
+
+  private UnsignedShort sensibilidadeLLRP(int sensibilidade) {
+    return new UnsignedShort((128 * sensibilidade) / 100);
   }
 
   private UnsignedShort potenciaLLRP(int potencia) {
     return new UnsignedShort((255 * potencia) / 100);
   }
 
-  private void configurarReader() throws TimeoutException {
-    SET_READER_CONFIG config = new SET_READER_CONFIG();
+  private void configReader() throws TimeoutException {
+    final SET_READER_CONFIG config = new SET_READER_CONFIG();
     config.setResetToFactoryDefault(YES);
-    List<AntennaConfiguration> antennasConfig = config.getAntennaConfigurationList();
+    final List<AntennaConfiguration> antennasConfig = config.getAntennaConfigurationList();
     leitor().antenasAtivas().forEach(antena -> antennasConfig.add(configuracaoDaAntena(antena)));
     transact(config);
   }
@@ -217,14 +224,14 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
     try {
       connect();
       deleteROSpec();
-      configurarReader();
+      configReader();
       addROSpec();
       enableROSpec();
       startSpec();
-    } catch (TimeoutException | LLRPConnectionAttemptFailedException ex) {
-      ex.printStackTrace();
-      LOGGER.error(ex.getMessage());
-      throw new RuntimeException("Erro de comunicação com leitor");
+    } catch (TimeoutException ex) {
+      throw new RuntimeException("Tempo de conexão com o leitor excedido");
+    } catch (LLRPConnectionAttemptFailedException ex) {
+      throw new RuntimeException("Erro de conexão com leitor");
     }
   }
 
@@ -233,6 +240,8 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
     try {
       stopSpec();
       deleteROSpec();
+      connector.disconnect();
+      connector.disconnect();
     } catch (TimeoutException ex) {
       LOGGER.error(ex.getMessage());
     }
@@ -246,11 +255,11 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   @Override
   public void messageReceived(LLRPMessage message) {
     if (message.getTypeNum() == RO_ACCESS_REPORT.TYPENUM) {
-      RO_ACCESS_REPORT report = (RO_ACCESS_REPORT) message;
-      List<TagReportData> reportDatas = report.getTagReportDataList();
+      final RO_ACCESS_REPORT report = (RO_ACCESS_REPORT) message;
+      final List<TagReportData> reportDatas = report.getTagReportDataList();
       for (TagReportData tagReportData : reportDatas) {
-        EPC_96 epc96 = (EPC_96) tagReportData.getEPCParameter();
-        String EPC = epc96.getEPC().toString();
+        final EPC_96 epc96 = (EPC_96) tagReportData.getEPCParameter();
+        final String EPC = epc96.getEPC().toString();
         int antena = 1;
         if (tagReportData.getAntennaID() != null) {
           antena = tagReportData.getAntennaID().getAntennaID().toInteger();

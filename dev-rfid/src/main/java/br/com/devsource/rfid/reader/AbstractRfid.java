@@ -41,7 +41,7 @@ public abstract class AbstractRfid implements RfidModule {
 
   protected final void onRead(Tag tag, int antena) {
     for (RfidHandler rfidHandler : handlers) {
-      rfidHandler.call(this, new ReadEvent(tag, leitor, antena));
+      rfidHandler.call(new ReadEvent(tag, leitor, antena));
     }
   }
 

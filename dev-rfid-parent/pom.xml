@@ -11,7 +11,6 @@
 
   <modules>
     <module>../dev-rfid</module>
-    <module>../dev-rfid-epc</module>
   </modules>
 
   <organization>

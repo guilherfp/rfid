@@ -35,4 +35,9 @@ public class ReadEvent {
     return tag;
   }
 
+  @Override
+  public String toString() {
+    return String.format("Leitor: %s, antena: %s, %s", leitor.hotName(), antena, tag.toString());
+  }
+
 }
