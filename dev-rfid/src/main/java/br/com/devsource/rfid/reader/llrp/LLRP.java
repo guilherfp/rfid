@@ -60,7 +60,7 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LLRP.class);
 
-  protected LLRP(Leitor leitor) {
+  public LLRP(Leitor leitor) {
     super(leitor);
     if (leitor.porta() == 0) {
       connector = new LLRPConnector(this, leitor.hotName());
