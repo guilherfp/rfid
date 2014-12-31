@@ -15,4 +15,10 @@ public interface RfidModule {
 
   void removeHandler(RfidHandler handler);
 
+  void disconect();
+
+  void connect();
+
+  boolean isConnected();
+
 }

@@ -51,7 +51,7 @@ import br.com.devsource.rfid.tag.Tag;
 
 public class LLRP extends AbstractRfid implements LLRPEndpoint {
 
-  private static final int TIME_OUT = 10 * 1000;
+  private static final int TIME_OUT = 5000;
   private final LLRPConnector connector;
   private final UnsignedInteger ROSPEC_ID = new UnsignedInteger(101);
 
@@ -69,10 +69,24 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
     }
   }
 
-  private void connect() throws LLRPConnectionAttemptFailedException {
-    LOGGER.info("Iniciando conexão com leitor...");
-    connector.connect();
-    LOGGER.info("Conexão com leitor iniciada: " + leitor().toString());
+  @Override
+  public void connect() {
+    try {
+      LOGGER.info("Iniciando conexão com leitor...");
+      connector.connect(TIME_OUT);
+      setConnected(true);
+      LOGGER.info("Conexão com leitor iniciada: " + leitor().toString());
+    } catch (LLRPConnectionAttemptFailedException ex) {
+      throw new RuntimeException("Erro de conexão com leitor");
+    }
+  }
+
+  @Override
+  public void disconect() {
+    if (isConnected()) {
+      connector.disconnect();
+      setConnected(false);
+    }
   }
 
   private void enableROSpec() throws TimeoutException {
@@ -230,8 +244,6 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
       startSpec();
     } catch (TimeoutException ex) {
       throw new RuntimeException("Tempo de conexão com o leitor excedido");
-    } catch (LLRPConnectionAttemptFailedException ex) {
-      throw new RuntimeException("Erro de conexão com leitor");
     }
   }
 
@@ -240,8 +252,7 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
     try {
       stopSpec();
       deleteROSpec();
-      connector.disconnect();
-      connector.disconnect();
+      disconect();
     } catch (TimeoutException ex) {
       LOGGER.error(ex.getMessage());
     }

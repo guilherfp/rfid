@@ -14,6 +14,7 @@ public abstract class AbstractRfid implements RfidModule {
 
   private final Leitor leitor;
   private List<RfidHandler> handlers = new ArrayList<>();
+  private boolean connected = false;
 
   protected AbstractRfid(Leitor leitor) {
     Validate.notNull(leitor);
@@ -43,6 +44,15 @@ public abstract class AbstractRfid implements RfidModule {
     for (RfidHandler rfidHandler : handlers) {
       rfidHandler.call(new ReadEvent(tag, leitor, antena));
     }
+  }
+
+  protected final void setConnected(boolean connected) {
+    this.connected = connected;
+  }
+
+  @Override
+  public final boolean isConnected() {
+    return connected;
   }
 
 }
