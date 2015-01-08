@@ -72,10 +72,12 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   @Override
   public void connect() {
     try {
-      LOGGER.info("Iniciando conexão com leitor...");
-      connector.connect(TIME_OUT);
-      setConnected(true);
-      LOGGER.info("Conexão com leitor iniciada: " + leitor().toString());
+      if (isConnected() == false) {
+        LOGGER.info("Iniciando conexão com leitor...");
+        connector.connect(2000);
+        setConnected(true);
+        LOGGER.info("Conexão com leitor iniciada: " + leitor().toString());
+      }
     } catch (LLRPConnectionAttemptFailedException ex) {
       throw new RuntimeException("Erro de conexão com leitor");
     }
@@ -278,6 +280,11 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
         onRead(new Tag(EPC), antena);
       }
     }
+  }
+
+  @Override
+  public String toString() {
+    return "Leitor LLRP: " + leitor().hotName();
   }
 
 }
