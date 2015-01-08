@@ -9,6 +9,7 @@
   <parent>
     <groupId>br.com.devsource</groupId>
     <artifactId>dev-rfid-parent</artifactId>
+    <relativePath>../dev-rfid-parent/pom.xml</relativePath>
     <version>1.0.0</version>
   </parent>
 
