@@ -4,7 +4,7 @@
 
   <groupId>br.com.devsource</groupId>
   <artifactId>dev-rfid-parent</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
 
   <name>Devsource RFID Parent </name>
@@ -20,7 +20,9 @@
 
   <properties>
     <java.version>1.8</java.version>
+    <slf4j.version>1.7.7</slf4j.version>
     <utilitario.version>1.1.1</utilitario.version>
+    <commons.lang3.version>3.3.2</commons.lang3.version>
     <dev.rfid.version>0.0.1-SNAPSHOT</dev.rfid.version>
   </properties>
 
@@ -30,6 +32,16 @@
         <groupId>br.com.devsource</groupId>
         <artifactId>utilitario</artifactId>
         <version>${utilitario.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons.lang3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
