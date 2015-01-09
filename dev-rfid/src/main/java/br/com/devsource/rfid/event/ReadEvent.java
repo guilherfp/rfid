@@ -2,8 +2,8 @@ package br.com.devsource.rfid.event;
 
 import org.apache.commons.lang3.Validate;
 
-import br.com.devsource.rfid.leitor.Leitor;
-import br.com.devsource.rfid.tag.Tag;
+import br.com.devsource.rfid.api.leitor.Leitor;
+import br.com.devsource.rfid.api.tag.Tag;
 
 public class ReadEvent {
 

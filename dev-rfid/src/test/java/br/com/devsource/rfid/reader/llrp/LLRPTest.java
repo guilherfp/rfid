@@ -1,6 +1,6 @@
 package br.com.devsource.rfid.reader.llrp;
 
-import br.com.devsource.rfid.leitor.Leitor;
+import br.com.devsource.rfid.api.leitor.Leitor;
 import br.com.devsource.rfid.reader.RfidModule;
 
 public class LLRPTest {

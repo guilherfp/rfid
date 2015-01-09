@@ -1,7 +1,7 @@
 package br.com.devsource.rfid.reader;
 
+import br.com.devsource.rfid.api.leitor.Leitor;
 import br.com.devsource.rfid.event.RfidHandler;
-import br.com.devsource.rfid.leitor.Leitor;
 
 public interface RfidModule {
 

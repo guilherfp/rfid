@@ -44,10 +44,10 @@ import org.llrp.ltk.types.UnsignedShortArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.devsource.rfid.leitor.Antena;
-import br.com.devsource.rfid.leitor.Leitor;
+import br.com.devsource.rfid.api.leitor.Antena;
+import br.com.devsource.rfid.api.leitor.Leitor;
+import br.com.devsource.rfid.api.tag.Tag;
 import br.com.devsource.rfid.reader.AbstractRfid;
-import br.com.devsource.rfid.tag.Tag;
 
 public class LLRP extends AbstractRfid implements LLRPEndpoint {
 

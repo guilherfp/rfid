@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.apache.commons.lang3.Validate;
 
+import br.com.devsource.rfid.api.leitor.Leitor;
+import br.com.devsource.rfid.api.tag.Tag;
 import br.com.devsource.rfid.event.ReadEvent;
 import br.com.devsource.rfid.event.RfidHandler;
-import br.com.devsource.rfid.leitor.Leitor;
-import br.com.devsource.rfid.tag.Tag;
 
 public abstract class AbstractRfid implements RfidModule {
 

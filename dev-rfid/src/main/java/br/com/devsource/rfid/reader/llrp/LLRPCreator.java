@@ -3,9 +3,9 @@ package br.com.devsource.rfid.reader.llrp;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.com.devsource.rfid.leitor.Antena;
-import br.com.devsource.rfid.leitor.Leitor;
-import br.com.devsource.rfid.leitor.Protocolo;
+import br.com.devsource.rfid.api.leitor.Antena;
+import br.com.devsource.rfid.api.leitor.Leitor;
+import br.com.devsource.rfid.api.leitor.Protocolo;
 
 public class LLRPCreator {
 
