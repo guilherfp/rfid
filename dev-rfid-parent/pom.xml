@@ -24,6 +24,7 @@
     <utilitario.version>1.1.1</utilitario.version>
     <commons.lang3.version>3.3.2</commons.lang3.version>
     <dev.rfid.version>${project.version}</dev.rfid.version>
+    <junit.version>4.12</junit.version>
   </properties>
 
   <dependencyManagement>
@@ -47,6 +48,11 @@
         <groupId>br.com.devsource.rfid</groupId>
         <artifactId>dev-rfid-api</artifactId>
         <version>${dev.rfid.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
