@@ -11,6 +11,7 @@
 
   <modules>
     <module>../dev-rfid</module>
+    <module>../dev-rfid-api</module>
   </modules>
 
   <organization>
