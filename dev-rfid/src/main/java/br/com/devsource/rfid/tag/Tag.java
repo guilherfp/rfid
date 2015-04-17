@@ -1,4 +1,4 @@
-package br.com.devsource.rfid.api.tag;
+package br.com.devsource.rfid.tag;
 
 import java.io.Serializable;
 

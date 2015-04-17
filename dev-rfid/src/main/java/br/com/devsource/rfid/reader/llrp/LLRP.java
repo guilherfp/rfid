@@ -44,12 +44,12 @@ import org.llrp.ltk.types.UnsignedShortArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import br.com.devsource.rfid.api.leitor.Antena;
-import br.com.devsource.rfid.api.leitor.Leitor;
-import br.com.devsource.rfid.api.tag.Tag;
+import br.com.devsource.rfid.leitor.AntennaConfig;
+import br.com.devsource.rfid.leitor.ReaderConfig;
 import br.com.devsource.rfid.reader.AbstractRfid;
+import br.com.devsource.rfid.tag.Tag;
 
-public class LLRP extends AbstractRfid implements LLRPEndpoint {
+public final class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   private static final int TIME_OUT = 5000;
   private final LLRPConnector connector;
@@ -60,7 +60,7 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(LLRP.class);
 
-  public LLRP(Leitor leitor) {
+  public LLRP(ReaderConfig leitor) {
     super(leitor);
     if (leitor.porta() == 0) {
       connector = new LLRPConnector(this, leitor.hotName());
@@ -115,7 +115,8 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   private ROReportSpec getReportSpec() {
     final ROReportSpec reportSpec = new ROReportSpec();
-    reportSpec.setROReportTrigger(new ROReportTriggerType(ROReportTriggerType.Upon_N_Tags_Or_End_Of_ROSpec));
+    reportSpec.setROReportTrigger(new ROReportTriggerType(
+      ROReportTriggerType.Upon_N_Tags_Or_End_Of_ROSpec));
     reportSpec.setN(new UnsignedShort(1));
     reportSpec.setTagReportContentSelector(getTagReportSelector());
     return reportSpec;
@@ -146,7 +147,8 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
     selector.setEnableROSpecID(NO);
     selector.setEnableSpecIndex(NO);
     selector.setEnableTagSeenCount(NO);
-    final List<AirProtocolEPCMemorySelector> airProtocolList = selector.getAirProtocolEPCMemorySelectorList();
+    final List<AirProtocolEPCMemorySelector> airProtocolList =
+        selector.getAirProtocolEPCMemorySelectorList();
     final C1G2EPCMemorySelector memorySelector = new C1G2EPCMemorySelector();
     memorySelector.setEnableCRC(NO);
     memorySelector.setEnablePCBits(NO);
@@ -158,7 +160,8 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
   private AISpec getAiSpec() {
     final AISpec aiSpec = new AISpec();
     final AISpecStopTrigger aiSpecStopTrigger = new AISpecStopTrigger();
-    aiSpecStopTrigger.setAISpecStopTriggerType(new AISpecStopTriggerType(AISpecStopTriggerType.Null));
+    aiSpecStopTrigger
+      .setAISpecStopTriggerType(new AISpecStopTriggerType(AISpecStopTriggerType.Null));
     aiSpecStopTrigger.setDurationTrigger(new UnsignedInteger(0));
     aiSpec.setAISpecStopTrigger(aiSpecStopTrigger);
     aiSpec.setAntennaIDs(getIDAntennas());
@@ -205,7 +208,7 @@ public class LLRP extends AbstractRfid implements LLRPEndpoint {
     transact(message);
   }
 
-  private AntennaConfiguration configuracaoDaAntena(Antena antena) {
+  private AntennaConfiguration configuracaoDaAntena(AntennaConfig antena) {
     final AntennaConfiguration config = new AntennaConfiguration();
     config.setAntennaID(new UnsignedShort(antena.numero()));
     final RFReceiver receiver = new RFReceiver();

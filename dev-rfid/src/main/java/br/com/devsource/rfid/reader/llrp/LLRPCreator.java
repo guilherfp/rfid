@@ -3,17 +3,17 @@ package br.com.devsource.rfid.reader.llrp;
 import java.util.HashSet;
 import java.util.Set;
 
-import br.com.devsource.rfid.api.leitor.Antena;
-import br.com.devsource.rfid.api.leitor.Leitor;
-import br.com.devsource.rfid.api.leitor.Protocolo;
+import br.com.devsource.rfid.leitor.AntennaConfig;
+import br.com.devsource.rfid.leitor.ReaderConfig;
+import br.com.devsource.rfid.leitor.Protocolo;
 
-public class LLRPCreator {
+class LLRPCreator {
 
-  public static Leitor simpleLeitor(final String hostname, final int porta, final int... antenas) {
-    return new Leitor() {
+  public static ReaderConfig simpleLeitor(final String hostname, final int porta, final int... antenas) {
+    return new ReaderConfig() {
 
       @Override
-      public int compareTo(Leitor o) {
+      public int compareTo(ReaderConfig o) {
         return 0;
       }
 
@@ -33,13 +33,13 @@ public class LLRPCreator {
       }
 
       @Override
-      public Set<Antena> antenas() {
-        final Set<Antena> setAntenas = new HashSet<>();
+      public Set<AntennaConfig> antenas() {
+        final Set<AntennaConfig> setAntenas = new HashSet<>();
         for (final int nrAntena : antenas) {
-          setAntenas.add(new Antena() {
+          setAntenas.add(new AntennaConfig() {
 
             @Override
-            public int compareTo(Antena o) {
+            public int compareTo(AntennaConfig o) {
               return 0;
             }
 

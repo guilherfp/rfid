@@ -5,24 +5,24 @@ import java.util.List;
 
 import org.apache.commons.lang3.Validate;
 
-import br.com.devsource.rfid.api.leitor.Leitor;
-import br.com.devsource.rfid.api.tag.Tag;
 import br.com.devsource.rfid.event.ReadEvent;
 import br.com.devsource.rfid.event.RfidHandler;
+import br.com.devsource.rfid.leitor.ReaderConfig;
+import br.com.devsource.rfid.tag.Tag;
 
 public abstract class AbstractRfid implements RfidModule {
 
-  private final Leitor leitor;
+  private final ReaderConfig leitor;
   private List<RfidHandler> handlers = new ArrayList<>();
   private boolean connected = false;
 
-  protected AbstractRfid(Leitor leitor) {
+  protected AbstractRfid(ReaderConfig leitor) {
     Validate.notNull(leitor);
     this.leitor = leitor;
   }
 
   @Override
-  public final Leitor leitor() {
+  public final ReaderConfig leitor() {
     return leitor;
   }
 

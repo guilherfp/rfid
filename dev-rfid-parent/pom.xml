@@ -11,7 +11,6 @@
 
   <modules>
     <module>../dev-rfid</module>
-    <module>../dev-rfid-api</module>
   </modules>
 
   <organization>
@@ -44,11 +43,6 @@
         <groupId>org.slf4j</groupId>
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>br.com.devsource.rfid</groupId>
-        <artifactId>dev-rfid-api</artifactId>
-        <version>${dev.rfid.version}</version>
       </dependency>
       <dependency>
         <groupId>junit</groupId>

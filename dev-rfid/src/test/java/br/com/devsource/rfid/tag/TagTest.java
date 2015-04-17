@@ -1,8 +1,10 @@
-package br.com.devsource.rfid.api.tag;
+package br.com.devsource.rfid.tag;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import br.com.devsource.rfid.tag.Tag;
 
 public class TagTest {
 

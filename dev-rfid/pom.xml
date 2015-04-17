@@ -33,8 +33,8 @@
       <version>1.2.17</version>
     </dependency>
     <dependency>
-      <groupId>br.com.devsource.rfid</groupId>
-      <artifactId>dev-rfid-api</artifactId>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
     </dependency>
   </dependencies>
 

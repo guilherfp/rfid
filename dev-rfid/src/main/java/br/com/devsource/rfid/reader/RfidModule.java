@@ -1,11 +1,11 @@
 package br.com.devsource.rfid.reader;
 
-import br.com.devsource.rfid.api.leitor.Leitor;
 import br.com.devsource.rfid.event.RfidHandler;
+import br.com.devsource.rfid.leitor.ReaderConfig;
 
 public interface RfidModule {
 
-  Leitor leitor();
+  ReaderConfig leitor();
 
   void startReader();
 
