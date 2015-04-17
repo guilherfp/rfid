@@ -1,11 +1,11 @@
 package br.com.devsource.rfid.leitor;
 
-public enum Protocolo {
+public enum Protocol {
 
   /** Lower Level Reader Protocol */
   LLRP("Lower Level Reader Protocol");
 
-  private Protocolo(String descricao) {
+  private Protocol(String descricao) {
     this.descricao = descricao;
   }
 

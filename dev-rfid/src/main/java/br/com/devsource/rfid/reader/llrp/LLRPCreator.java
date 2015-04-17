@@ -5,7 +5,7 @@ import java.util.Set;
 
 import br.com.devsource.rfid.leitor.AntennaConfig;
 import br.com.devsource.rfid.leitor.ReaderConfig;
-import br.com.devsource.rfid.leitor.Protocolo;
+import br.com.devsource.rfid.leitor.Protocol;
 
 class LLRPCreator {
 
@@ -18,22 +18,22 @@ class LLRPCreator {
       }
 
       @Override
-      public Protocolo protocolo() {
-        return Protocolo.LLRP;
+      public Protocol getProtocol() {
+        return Protocol.LLRP;
       }
 
       @Override
-      public int porta() {
+      public int getPort() {
         return porta;
       }
 
       @Override
-      public String hotName() {
+      public String getHostName() {
         return hostname;
       }
 
       @Override
-      public Set<AntennaConfig> antenas() {
+      public Set<AntennaConfig> getAntennas() {
         final Set<AntennaConfig> setAntenas = new HashSet<>();
         for (final int nrAntena : antenas) {
           setAntenas.add(new AntennaConfig() {
@@ -44,17 +44,17 @@ class LLRPCreator {
             }
 
             @Override
-            public int potencia() {
+            public int getTransmitPower() {
               return 100;
             }
 
             @Override
-            public int numero() {
+            public int getNumber() {
               return nrAntena;
             }
 
             @Override
-            public boolean ativa() {
+            public boolean isActive() {
               return true;
             }
           });

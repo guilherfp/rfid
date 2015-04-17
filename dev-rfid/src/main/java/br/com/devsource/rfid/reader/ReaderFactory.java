@@ -9,7 +9,7 @@ public class ReaderFactory {
 
   public static RfidModule factory(ReaderConfig leitor) {
     Validate.notNull(leitor);
-    switch (leitor.protocolo()) {
+    switch (leitor.getProtocol()) {
       case LLRP:
       default:
         return new LLRP(leitor);

@@ -62,10 +62,10 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   public LLRP(ReaderConfig leitor) {
     super(leitor);
-    if (leitor.porta() == 0) {
-      connector = new LLRPConnector(this, leitor.hotName());
+    if (leitor.getPort() == 0) {
+      connector = new LLRPConnector(this, leitor.getHostName());
     } else {
-      connector = new LLRPConnector(this, leitor.hotName(), leitor.porta());
+      connector = new LLRPConnector(this, leitor.getHostName(), leitor.getPort());
     }
   }
 
@@ -105,7 +105,7 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   private UnsignedShortArray getIDAntennas() {
     final UnsignedShortArray array = new UnsignedShortArray();
-    leitor().antenasAtivas().forEach(antena -> array.add(new UnsignedShort(antena.numero())));
+    leitor().getActiviesAntennas().forEach(antena -> array.add(new UnsignedShort(antena.getNumber())));
     return array;
   }
 
@@ -210,12 +210,12 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   private AntennaConfiguration configuracaoDaAntena(AntennaConfig antena) {
     final AntennaConfiguration config = new AntennaConfiguration();
-    config.setAntennaID(new UnsignedShort(antena.numero()));
+    config.setAntennaID(new UnsignedShort(antena.getNumber()));
     final RFReceiver receiver = new RFReceiver();
     receiver.setReceiverSensitivity(sensibilidadeLLRP(100));
     config.setRFReceiver(receiver);
     final RFTransmitter transmitter = new RFTransmitter();
-    transmitter.setTransmitPower(potenciaLLRP(antena.potencia()));
+    transmitter.setTransmitPower(potenciaLLRP(antena.getTransmitPower()));
     transmitter.setChannelIndex(new UnsignedShort(0));
     transmitter.setHopTableID(new UnsignedShort(0));
     config.setRFTransmitter(transmitter);
@@ -234,7 +234,7 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
     final SET_READER_CONFIG config = new SET_READER_CONFIG();
     config.setResetToFactoryDefault(YES);
     final List<AntennaConfiguration> antennasConfig = config.getAntennaConfigurationList();
-    leitor().antenasAtivas().forEach(antena -> antennasConfig.add(configuracaoDaAntena(antena)));
+    leitor().getActiviesAntennas().forEach(antena -> antennasConfig.add(configuracaoDaAntena(antena)));
     transact(config);
   }
 
@@ -287,7 +287,7 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   @Override
   public String toString() {
-    return "Leitor LLRP: " + leitor().hotName();
+    return "Leitor LLRP: " + leitor().getHostName();
   }
 
 }

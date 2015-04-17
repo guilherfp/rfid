@@ -5,16 +5,16 @@ import java.util.stream.Collectors;
 
 public interface ReaderConfig extends Comparable<ReaderConfig> {
 
-  String hotName();
+  String getHostName();
 
-  int porta();
+  int getPort();
 
-  Protocolo protocolo();
+  Protocol getProtocol();
 
-  Set<AntennaConfig> antenas();
+  Set<AntennaConfig> getAntennas();
 
-  default Set<AntennaConfig> antenasAtivas() {
-    return antenas().stream().filter(AntennaConfig::ativa).collect(Collectors.toSet());
+  default Set<AntennaConfig> getActiviesAntennas() {
+    return getAntennas().stream().filter(AntennaConfig::isActive).collect(Collectors.toSet());
   }
 
 }
