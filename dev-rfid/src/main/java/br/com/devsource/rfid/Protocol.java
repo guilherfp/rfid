@@ -1,15 +1,18 @@
-package br.com.devsource.rfid.leitor;
+package br.com.devsource.rfid;
 
+/**
+ * @author Guilherme Pacheco
+ */
 public enum Protocol {
 
   /** Lower Level Reader Protocol */
   LLRP("Lower Level Reader Protocol");
 
+  private String descricao;
+
   private Protocol(String descricao) {
     this.descricao = descricao;
   }
-
-  private String descricao;
 
   public String getDescricao() {
     return descricao;

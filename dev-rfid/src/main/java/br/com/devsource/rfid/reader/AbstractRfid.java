@@ -5,11 +5,15 @@ import java.util.List;
 
 import org.apache.commons.lang3.Validate;
 
-import br.com.devsource.rfid.event.ReadEvent;
-import br.com.devsource.rfid.event.RfidHandler;
-import br.com.devsource.rfid.leitor.ReaderConfig;
+import br.com.devsource.rfid.ReadEvent;
+import br.com.devsource.rfid.ReaderConfig;
+import br.com.devsource.rfid.RfidHandler;
+import br.com.devsource.rfid.RfidModule;
 import br.com.devsource.rfid.tag.Tag;
 
+/**
+ * @author Guilherme Pacheco
+ */
 public abstract class AbstractRfid implements RfidModule {
 
   private final ReaderConfig leitor;

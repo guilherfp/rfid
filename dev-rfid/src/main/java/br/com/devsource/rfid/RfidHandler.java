@@ -1,6 +1,8 @@
-package br.com.devsource.rfid.event;
+package br.com.devsource.rfid;
 
-
+/**
+ * @author Guilherme Pacheco
+ */
 @FunctionalInterface
 public interface RfidHandler {
 

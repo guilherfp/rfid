@@ -1,8 +1,11 @@
-package br.com.devsource.rfid.leitor;
+package br.com.devsource.rfid;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Guilherme Pacheco
+ */
 public interface ReaderConfig extends Comparable<ReaderConfig> {
 
   String getHostName();

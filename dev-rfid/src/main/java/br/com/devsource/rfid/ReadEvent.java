@@ -1,10 +1,12 @@
-package br.com.devsource.rfid.event;
+package br.com.devsource.rfid;
 
 import org.apache.commons.lang3.Validate;
 
-import br.com.devsource.rfid.leitor.ReaderConfig;
 import br.com.devsource.rfid.tag.Tag;
 
+/**
+ * @author Guilherme Pacheco
+ */
 public class ReadEvent {
 
   private final Tag tag;
@@ -37,7 +39,8 @@ public class ReadEvent {
 
   @Override
   public String toString() {
-    return String.format("Leitor: %s, antena: %s, %s", leitor.getHostName(), antena, tag.toString());
+    return String
+      .format("Leitor: %s, antena: %s, %s", leitor.getHostName(), antena, tag.toString());
   }
 
 }

@@ -1,8 +1,8 @@
-package br.com.devsource.rfid.reader;
+package br.com.devsource.rfid;
 
-import br.com.devsource.rfid.event.RfidHandler;
-import br.com.devsource.rfid.leitor.ReaderConfig;
-
+/**
+ * @author Guilherme Pacheco
+ */
 public interface RfidModule {
 
   ReaderConfig leitor();

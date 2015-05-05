@@ -4,13 +4,18 @@ import java.io.Serializable;
 
 import org.apache.commons.lang3.Validate;
 
+/**
+ * @author Guilherme Pacheco
+ */
 public final class Tag implements Comparable<Tag>, Serializable {
   private static final long serialVersionUID = 4941722287359138768L;
 
   private String epc;
   private String userMemory = "";
 
-  Tag() {}
+  Tag() {
+    super();
+  }
 
   public Tag(String epc, String userMemory) {
     Validate.notBlank(epc);
