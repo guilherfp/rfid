@@ -1,10 +1,13 @@
-package br.com.devsource.rfid.reader.llrp;
+package br.com.devsource.rfid.llrp;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeoutException;
 
 import org.llrp.ltk.generated.enumerations.AISpecStopTriggerType;
 import org.llrp.ltk.generated.enumerations.AirProtocols;
+import org.llrp.ltk.generated.enumerations.GetReaderCapabilitiesRequestedData;
 import org.llrp.ltk.generated.enumerations.ROReportTriggerType;
 import org.llrp.ltk.generated.enumerations.ROSpecStartTriggerType;
 import org.llrp.ltk.generated.enumerations.ROSpecState;
@@ -13,6 +16,8 @@ import org.llrp.ltk.generated.interfaces.AirProtocolEPCMemorySelector;
 import org.llrp.ltk.generated.messages.ADD_ROSPEC;
 import org.llrp.ltk.generated.messages.DELETE_ROSPEC;
 import org.llrp.ltk.generated.messages.ENABLE_ROSPEC;
+import org.llrp.ltk.generated.messages.GET_READER_CAPABILITIES;
+import org.llrp.ltk.generated.messages.GET_READER_CAPABILITIES_RESPONSE;
 import org.llrp.ltk.generated.messages.RO_ACCESS_REPORT;
 import org.llrp.ltk.generated.messages.SET_READER_CONFIG;
 import org.llrp.ltk.generated.messages.START_ROSPEC;
@@ -21,7 +26,6 @@ import org.llrp.ltk.generated.parameters.AISpec;
 import org.llrp.ltk.generated.parameters.AISpecStopTrigger;
 import org.llrp.ltk.generated.parameters.AntennaConfiguration;
 import org.llrp.ltk.generated.parameters.C1G2EPCMemorySelector;
-import org.llrp.ltk.generated.parameters.EPC_96;
 import org.llrp.ltk.generated.parameters.InventoryParameterSpec;
 import org.llrp.ltk.generated.parameters.RFReceiver;
 import org.llrp.ltk.generated.parameters.RFTransmitter;
@@ -31,11 +35,9 @@ import org.llrp.ltk.generated.parameters.ROSpec;
 import org.llrp.ltk.generated.parameters.ROSpecStartTrigger;
 import org.llrp.ltk.generated.parameters.ROSpecStopTrigger;
 import org.llrp.ltk.generated.parameters.TagReportContentSelector;
-import org.llrp.ltk.generated.parameters.TagReportData;
 import org.llrp.ltk.net.LLRPConnectionAttemptFailedException;
 import org.llrp.ltk.net.LLRPConnector;
 import org.llrp.ltk.net.LLRPEndpoint;
-import org.llrp.ltk.types.Bit;
 import org.llrp.ltk.types.LLRPMessage;
 import org.llrp.ltk.types.UnsignedByte;
 import org.llrp.ltk.types.UnsignedInteger;
@@ -44,43 +46,41 @@ import org.llrp.ltk.types.UnsignedShortArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import br.com.devsource.rfid.AbstractRfid;
 import br.com.devsource.rfid.AntennaConfig;
 import br.com.devsource.rfid.ReaderConfig;
 import br.com.devsource.rfid.ReaderException;
-import br.com.devsource.rfid.reader.AbstractRfid;
+import br.com.devsource.rfid.ReaderUtils;
+import br.com.devsource.rfid.RfidDevice;
+import br.com.devsource.rfid.SimpleRfidDevice;
 import br.com.devsource.rfid.tag.Tag;
 
 /**
  * @author Guilherme Pacheco
  */
-public final class LLRP extends AbstractRfid implements LLRPEndpoint {
+public final class LLRPReader extends AbstractRfid implements LLRPEndpoint {
 
-  private static final int TIME_OUT = 5000;
   private final LLRPConnector connector;
   private final UnsignedInteger rospecId = new UnsignedInteger(101);
+  private static final Logger LOGGER = LoggerFactory.getLogger(LLRPReader.class);
 
-  private static final Bit NO = new Bit(0);
-  private static final Bit YES = new Bit(1);
-
-  private static final Logger LOGGER = LoggerFactory.getLogger(LLRP.class);
-
-  public LLRP(ReaderConfig leitor) {
-    super(leitor);
-    if (leitor.getPort() == 0) {
-      connector = new LLRPConnector(this, leitor.getHostName());
+  public LLRPReader(ReaderConfig config) {
+    super(config);
+    if (config.getPort() == 0) {
+      connector = new LLRPConnector(this, config.getHostname());
     } else {
-      connector = new LLRPConnector(this, leitor.getHostName(), leitor.getPort());
+      connector = new LLRPConnector(this, config.getHostname(), config.getPort());
     }
   }
 
   @Override
   public void connect() {
     try {
-      if (!isConnected()) {
+      if (!isConnected().get()) {
         LOGGER.info("Iniciando conexão com leitor...");
         connector.connect(2000);
         setConnected(true);
-        LOGGER.info("Conexão com leitor iniciada: " + leitor().toString());
+        LOGGER.info("Conexão com leitor iniciada: " + getConfig().toString());
       }
     } catch (LLRPConnectionAttemptFailedException ex) {
       throw new ReaderException("Erro de conexão com leitor", ex);
@@ -89,7 +89,7 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   @Override
   public void disconect() {
-    if (isConnected()) {
+    if (isConnected().get()) {
       connector.disconnect();
       setConnected(false);
     }
@@ -109,13 +109,12 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   private UnsignedShortArray getIDAntennas() {
     UnsignedShortArray array = new UnsignedShortArray();
-    leitor().getActiviesAntennas().forEach(
-      antena -> array.add(new UnsignedShort(antena.getNumber())));
+    getAntennas().forEach(a -> array.add(new UnsignedShort(a.getNumber())));
     return array;
   }
 
   private LLRPMessage transact(LLRPMessage message) throws TimeoutException {
-    return connector.transact(message, TIME_OUT);
+    return connector.transact(message, getConfig().getTimeOut());
   }
 
   private ROReportSpec getReportSpec() {
@@ -142,21 +141,21 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
 
   private TagReportContentSelector getTagReportSelector() {
     TagReportContentSelector selector = new TagReportContentSelector();
-    selector.setEnableAccessSpecID(YES);
-    selector.setEnableAntennaID(YES);
-    selector.setEnableChannelIndex(NO);
-    selector.setEnableFirstSeenTimestamp(NO);
-    selector.setEnableInventoryParameterSpecID(YES);
-    selector.setEnableLastSeenTimestamp(NO);
-    selector.setEnablePeakRSSI(NO);
-    selector.setEnableROSpecID(NO);
-    selector.setEnableSpecIndex(NO);
-    selector.setEnableTagSeenCount(NO);
+    selector.setEnableAccessSpecID(LLRPUtils.YES);
+    selector.setEnableAntennaID(LLRPUtils.YES);
+    selector.setEnableChannelIndex(LLRPUtils.NO);
+    selector.setEnableFirstSeenTimestamp(LLRPUtils.NO);
+    selector.setEnableInventoryParameterSpecID(LLRPUtils.YES);
+    selector.setEnableLastSeenTimestamp(LLRPUtils.NO);
+    selector.setEnablePeakRSSI(LLRPUtils.NO);
+    selector.setEnableROSpecID(LLRPUtils.NO);
+    selector.setEnableSpecIndex(LLRPUtils.NO);
+    selector.setEnableTagSeenCount(LLRPUtils.NO);
     List<AirProtocolEPCMemorySelector> airProtocolList =
         selector.getAirProtocolEPCMemorySelectorList();
     C1G2EPCMemorySelector memorySelector = new C1G2EPCMemorySelector();
-    memorySelector.setEnableCRC(NO);
-    memorySelector.setEnablePCBits(NO);
+    memorySelector.setEnableCRC(LLRPUtils.NO);
+    memorySelector.setEnablePCBits(LLRPUtils.NO);
     airProtocolList.add(memorySelector);
     selector.setAirProtocolEPCMemorySelectorList(airProtocolList);
     return selector;
@@ -202,9 +201,11 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
   }
 
   private void startSpec() throws TimeoutException {
+    LOGGER.debug("Reader starting...");
     START_ROSPEC message = new START_ROSPEC();
     message.setROSpecID(rospecId);
     transact(message);
+    LOGGER.debug("Reader started!");
   }
 
   private void stopSpec() throws TimeoutException {
@@ -213,34 +214,45 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
     transact(message);
   }
 
-  private AntennaConfiguration configuracaoDaAntena(AntennaConfig antena) {
+  private AntennaConfiguration configAntena(AntennaConfig antena) {
     AntennaConfiguration config = new AntennaConfiguration();
     config.setAntennaID(new UnsignedShort(antena.getNumber()));
-    RFReceiver receiver = new RFReceiver();
-    receiver.setReceiverSensitivity(sensibilidadeLLRP(100));
-    config.setRFReceiver(receiver);
-    RFTransmitter transmitter = new RFTransmitter();
-    transmitter.setTransmitPower(potenciaLLRP(antena.getTransmitPower()));
-    transmitter.setChannelIndex(new UnsignedShort(0));
-    transmitter.setHopTableID(new UnsignedShort(0));
-    config.setRFTransmitter(transmitter);
+    config.setRFReceiver(getReceiver());
+    config.setRFTransmitter(getTransmitter(antena));
     return config;
   }
 
-  private UnsignedShort sensibilidadeLLRP(int sensibilidade) {
-    return new UnsignedShort((128 * sensibilidade) / 100);
+  private RFReceiver getReceiver() {
+    RFReceiver receiver = new RFReceiver();
+    receiver.setReceiverSensitivity(sensibilidadeLLRP(128));
+    return receiver;
   }
 
-  private UnsignedShort potenciaLLRP(int potencia) {
-    return new UnsignedShort((255 * potencia) / 100);
+  private RFTransmitter getTransmitter(AntennaConfig antena) {
+    RFTransmitter transmitter = new RFTransmitter();
+    transmitter.setTransmitPower(trasmitPower(antena));
+    transmitter.setChannelIndex(new UnsignedShort(0));
+    transmitter.setHopTableID(new UnsignedShort(0));
+    return transmitter;
+  }
+
+  private UnsignedShort sensibilidadeLLRP(int sensibilidade) {
+    return new UnsignedShort(sensibilidade);
+  }
+
+  private UnsignedShort trasmitPower(AntennaConfig antena) {
+    return new UnsignedShort(power(antena));
+  }
+
+  private int power(AntennaConfig antena) {
+    int max = getDevice().getMaxTransmitPower();
+    return ReaderUtils.scale(antena.getTransmitPower(), max);
   }
 
   private void configReader() throws TimeoutException {
     SET_READER_CONFIG config = new SET_READER_CONFIG();
-    config.setResetToFactoryDefault(YES);
-    List<AntennaConfiguration> antennasConfig = config.getAntennaConfigurationList();
-    leitor().getActiviesAntennas().forEach(
-      antena -> antennasConfig.add(configuracaoDaAntena(antena)));
+    config.setResetToFactoryDefault(LLRPUtils.YES);
+    getAntennas().forEach(a -> config.getAntennaConfigurationList().add(configAntena(a)));
     transact(config);
   }
 
@@ -277,22 +289,48 @@ public final class LLRP extends AbstractRfid implements LLRPEndpoint {
   @Override
   public void messageReceived(LLRPMessage message) {
     if (message.getTypeNum() == RO_ACCESS_REPORT.TYPENUM) {
-      RO_ACCESS_REPORT report = (RO_ACCESS_REPORT) message;
-      List<TagReportData> reportDatas = report.getTagReportDataList();
-      for (TagReportData tagReportData : reportDatas) {
-        EPC_96 epc96 = (EPC_96) tagReportData.getEPCParameter();
-        int antena = 1;
-        if (tagReportData.getAntennaID() != null) {
-          antena = tagReportData.getAntennaID().getAntennaID().toInteger();
-        }
-        onRead(new Tag(epc96.getEPC().toString()), antena);
-      }
+      LLRPUtils.extractedTags(message, this::read);
     }
+  }
+
+  private void read(Entry<Tag, Integer> read) {
+    onRead(read.getKey(), read.getValue());
   }
 
   @Override
   public String toString() {
-    return "Leitor LLRP: " + leitor().getHostName();
+    ReaderConfig config = getConfig();
+    String format = String.format("Reader LLRP: %s:%s", config.getHostname(), config.getPort());
+    StringBuilder builder = new StringBuilder(format);
+    builder.append(" [");
+    Iterator<AntennaConfig> antennas = config.getAntennas().iterator();
+    while (antennas.hasNext()) {
+      AntennaConfig antenna = antennas.next();
+      int number = antenna.getNumber();
+      int power = power(antenna);
+      builder.append(String.format("(%s, %sdB)", number, power));
+      if (antennas.hasNext()) {
+        builder.append(", ");
+      }
+    }
+    return builder.append("]").toString();
   }
 
+  private GET_READER_CAPABILITIES_RESPONSE getCapabilities() throws TimeoutException {
+    GET_READER_CAPABILITIES message = new GET_READER_CAPABILITIES();
+    message.setRequestedData(new GetReaderCapabilitiesRequestedData(
+      GetReaderCapabilitiesRequestedData.All));
+    return (GET_READER_CAPABILITIES_RESPONSE) transact(message);
+  }
+
+  @Override
+  protected RfidDevice requestDevice() {
+    try {
+      RfidDeviceBuilder builder = RfidDeviceBuilder.create();
+      builder.capabilities(getCapabilities());
+      return builder.buid();
+    } catch (Exception ex) {
+      return SimpleRfidDevice.NAO_ENCONTRADO;
+    }
+  }
 }

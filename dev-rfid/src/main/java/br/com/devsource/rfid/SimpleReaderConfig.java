@@ -1,18 +1,25 @@
 package br.com.devsource.rfid;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  * @author Guilherme Pacheco
  */
-public class SimpleReader implements ReaderConfig {
+public class SimpleReaderConfig implements ReaderConfig {
 
   private String hostname;
   private int port;
   private Protocol protocol;
   private Set<AntennaConfig> antennas;
 
-  public SimpleReader(String hostname, int port, Protocol protocol, Set<AntennaConfig> antennas) {
+  public SimpleReaderConfig(String hostname, int port, Protocol protocol) {
+    this(hostname, port, protocol, new HashSet<>());
+  }
+
+  public SimpleReaderConfig(String hostname, int port, Protocol protocol,
+                            Set<AntennaConfig> antennas)
+  {
     this.hostname = hostname;
     this.protocol = protocol;
     this.antennas = antennas;
@@ -20,7 +27,7 @@ public class SimpleReader implements ReaderConfig {
   }
 
   @Override
-  public String getHostName() {
+  public String getHostname() {
     return hostname;
   }
 
@@ -39,9 +46,13 @@ public class SimpleReader implements ReaderConfig {
     return antennas;
   }
 
+  public void addAntenna(AntennaConfig antenna) {
+    antennas.add(antenna);
+  }
+
   @Override
   public int compareTo(ReaderConfig o) {
-    return hostname.compareTo(o.getHostName());
+    return hostname.compareTo(o.getHostname());
   }
 
 }

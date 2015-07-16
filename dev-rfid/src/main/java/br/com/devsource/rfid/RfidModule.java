@@ -1,11 +1,17 @@
 package br.com.devsource.rfid;
 
+import javafx.beans.property.ReadOnlyBooleanProperty;
+
 /**
  * @author Guilherme Pacheco
  */
 public interface RfidModule {
 
-  ReaderConfig leitor();
+  ReaderConfig getConfig();
+
+  void disconect();
+
+  void connect();
 
   void startReader();
 
@@ -15,10 +21,8 @@ public interface RfidModule {
 
   void removeHandler(RfidHandler handler);
 
-  void disconect();
+  ReadOnlyBooleanProperty isConnected();
 
-  void connect();
-
-  boolean isConnected();
+  RfidDevice getDevice();
 
 }

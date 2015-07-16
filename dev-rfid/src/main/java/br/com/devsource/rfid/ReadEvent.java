@@ -11,22 +11,18 @@ public class ReadEvent {
 
   private final Tag tag;
   private final int antena;
-  private final ReaderConfig leitor;
+  private final ReaderConfig config;
 
-  public ReadEvent(Tag tag, ReaderConfig leitor, int antena) {
+  public ReadEvent(Tag tag, ReaderConfig config, int antena) {
     Validate.notNull(tag);
-    Validate.notNull(leitor);
+    Validate.notNull(config);
     this.tag = tag;
-    this.leitor = leitor;
+    this.config = config;
     this.antena = antena;
   }
 
-  public ReadEvent(Tag tag, ReaderConfig leitor) {
-    this(tag, leitor, 1);
-  }
-
-  public ReaderConfig getLeitor() {
-    return leitor;
+  public ReaderConfig getConfig() {
+    return config;
   }
 
   public int getAntena() {
@@ -40,7 +36,7 @@ public class ReadEvent {
   @Override
   public String toString() {
     return String
-      .format("Leitor: %s, antena: %s, %s", leitor.getHostName(), antena, tag.toString());
+      .format("Leitor: %s, antena: %s, %s", config.getHostname(), antena, tag.toString());
   }
 
 }

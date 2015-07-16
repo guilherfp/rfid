@@ -3,16 +3,14 @@ package br.com.devsource.rfid;
 /**
  * @author Guilherme Pacheco
  */
-public enum Protocol {
+public enum Mode {
 
-  /** Lower Level Reader Protocol */
-  LLRP("Lower Level Reader Protocol"),
-  /** Basic Reader Interface */
-  BRI("Basic Reader Interface");
+  UNIQUE("Leitura única"),
+  ALL("Ler tudo");
 
   private String descricao;
 
-  private Protocol(String descricao) {
+  private Mode(String descricao) {
     this.descricao = descricao;
   }
 

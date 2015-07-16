@@ -14,13 +14,13 @@ public class ReaderCreator {
 
   public static ReaderConfig simpleReader(String hostname, int port, Protocol protocol,
       int... antennas) {
-    return new SimpleReader(hostname, port, protocol, buidAntennas(antennas));
+    return new SimpleReaderConfig(hostname, port, protocol, buidAntennas(antennas));
   }
 
   private static Set<AntennaConfig> buidAntennas(int... antenas) {
     Set<AntennaConfig> setAntenas = new HashSet<>();
     for (int nrAntena : antenas) {
-      setAntenas.add(new SimpleAntena(nrAntena, 100, true));
+      setAntenas.add(new SimpleAntennaConfig(nrAntena, 100, true));
     }
     return setAntenas;
   }
