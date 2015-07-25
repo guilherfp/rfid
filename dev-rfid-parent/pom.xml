@@ -10,7 +10,8 @@
   <name>Devsource RFID Parent </name>
 
   <modules>
-    <module>../dev-rfid</module>
+    <module>dev-rfid</module>
+    <module>testee</module>
   </modules>
 
   <organization>
