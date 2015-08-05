@@ -89,9 +89,11 @@ public final class LLRPReader extends AbstractRfid implements LLRPEndpoint {
 
   @Override
   public void disconect() {
-    if (isConnected().get()) {
+    try {
       connector.disconnect();
       setConnected(false);
+    } catch (Exception ex) {
+      LOGGER.error("Erro ao desconectar-se do leitor: {}", ex.getMessage());
     }
   }
 
@@ -151,8 +153,8 @@ public final class LLRPReader extends AbstractRfid implements LLRPEndpoint {
     selector.setEnableROSpecID(LLRPUtils.NO);
     selector.setEnableSpecIndex(LLRPUtils.NO);
     selector.setEnableTagSeenCount(LLRPUtils.NO);
-    List<AirProtocolEPCMemorySelector> airProtocolList =
-        selector.getAirProtocolEPCMemorySelectorList();
+    List<AirProtocolEPCMemorySelector> airProtocolList = selector
+      .getAirProtocolEPCMemorySelectorList();
     C1G2EPCMemorySelector memorySelector = new C1G2EPCMemorySelector();
     memorySelector.setEnableCRC(LLRPUtils.NO);
     memorySelector.setEnablePCBits(LLRPUtils.NO);
@@ -164,8 +166,8 @@ public final class LLRPReader extends AbstractRfid implements LLRPEndpoint {
   private AISpec getAiSpec() {
     AISpec aiSpec = new AISpec();
     AISpecStopTrigger aiSpecStopTrigger = new AISpecStopTrigger();
-    aiSpecStopTrigger
-      .setAISpecStopTriggerType(new AISpecStopTriggerType(AISpecStopTriggerType.Null));
+    aiSpecStopTrigger.setAISpecStopTriggerType(new AISpecStopTriggerType(
+      AISpecStopTriggerType.Null));
     aiSpecStopTrigger.setDurationTrigger(new UnsignedInteger(0));
     aiSpec.setAISpecStopTrigger(aiSpecStopTrigger);
     aiSpec.setAntennaIDs(getIDAntennas());

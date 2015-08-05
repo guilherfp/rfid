@@ -11,7 +11,7 @@
 
   <modules>
     <module>dev-rfid</module>
-    <module>testee</module>
+    
   </modules>
 
   <organization>
