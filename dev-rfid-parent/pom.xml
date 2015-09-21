@@ -11,7 +11,7 @@
 
   <modules>
     <module>dev-rfid</module>
-    
+
   </modules>
 
   <organization>
@@ -99,14 +99,12 @@
 
   <distributionManagement>
     <repository>
-      <id>devsource.internal</id>
-      <name>DevSource Repository Internal</name>
-      <url>dav:http://devsource.com.br:8888/repository/internal/</url>
+      <id>devsource.releases</id>
+      <url>http://devsource.com.br:8081/nexus/content/repositories/releases</url>
     </repository>
     <snapshotRepository>
       <id>devsource.snapshots</id>
-      <name>DevSource Repository Snapshots</name>
-      <url>dav:http://devsource.com.br:8888/repository/snapshots/</url>
+      <url>http://devsource.com.br:8081/nexus/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>
 
