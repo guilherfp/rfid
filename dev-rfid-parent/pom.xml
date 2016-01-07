@@ -11,13 +11,18 @@
 
   <modules>
     <module>dev-rfid</module>
-
   </modules>
 
   <organization>
     <name>DevSource</name>
     <url>http://devsource.com.br</url>
   </organization>
+
+  <scm>
+    <url>scm:git:https://github.com/guilherfp/dev-rfid.git</url>
+    <connection>scm:git:https://github.com/guilherfp/dev-rfid.git</connection>
+    <developerConnection>scm:git:https://github.com/guilherfp/dev-rfid.git</developerConnection>
+  </scm>
 
   <properties>
     <java.version>1.8</java.version>
