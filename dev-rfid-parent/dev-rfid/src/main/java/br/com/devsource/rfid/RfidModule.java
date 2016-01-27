@@ -25,4 +25,6 @@ public interface RfidModule {
 
   RfidDevice getDevice();
 
+  Gpio getGpio();
+
 }

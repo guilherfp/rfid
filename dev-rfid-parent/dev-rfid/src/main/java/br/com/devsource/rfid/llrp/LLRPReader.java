@@ -48,6 +48,7 @@ import org.slf4j.LoggerFactory;
 
 import br.com.devsource.rfid.AbstractRfid;
 import br.com.devsource.rfid.AntennaConfig;
+import br.com.devsource.rfid.Gpio;
 import br.com.devsource.rfid.ReaderConfig;
 import br.com.devsource.rfid.ReaderException;
 import br.com.devsource.rfid.ReaderUtils;
@@ -334,5 +335,11 @@ public final class LLRPReader extends AbstractRfid implements LLRPEndpoint {
     } catch (Exception ex) {
       return SimpleRfidDevice.NAO_ENCONTRADO;
     }
+  }
+
+  @Override
+  public Gpio getGpio() {
+    // TODO Auto-generated method stub
+    return null;
   }
 }

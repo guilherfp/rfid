@@ -2,7 +2,7 @@ package br.com.devsource.rfid;
 
 import org.apache.commons.lang3.Validate;
 
-import br.com.devsource.rfid.bri.BRIReader;
+import br.com.devsource.rfid.bri.BriReader;
 import br.com.devsource.rfid.llrp.LLRPReader;
 
 /**
@@ -16,10 +16,14 @@ public class ReaderFactory {
 
   public static RfidModule factory(ReaderConfig leitor) {
     Validate.notNull(leitor);
-    if (Protocol.BRI.equals(leitor.getProtocol())) {
-      return new BRIReader(leitor);
-    } else {
-    return new LLRPReader(leitor);
+    try {
+      if (Protocol.BRI.equals(leitor.getProtocol())) {
+        return new BriReader(leitor);
+      } else {
+        return new LLRPReader(leitor);
+      }
+    } catch (Exception ex) {
+      throw new RuntimeException(ex.getMessage());
     }
   }
 
