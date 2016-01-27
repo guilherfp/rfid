@@ -13,7 +13,7 @@ public interface RfidModule {
 
   void connect();
 
-  void startReader();
+  void startReader(RfidField... fields);
 
   void stopReader();
 

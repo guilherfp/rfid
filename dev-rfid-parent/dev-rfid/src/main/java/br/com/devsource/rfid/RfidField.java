@@ -1,8 +1,9 @@
 package br.com.devsource.rfid;
 
-public enum TagField {
+public enum RfidField {
 
   EPCID,
-  TAGID;
+  TAGID,
+  ANTENNA;
 
 }

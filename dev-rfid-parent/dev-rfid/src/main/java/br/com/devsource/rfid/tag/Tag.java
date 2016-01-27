@@ -13,6 +13,7 @@ public final class Tag implements Comparable<Tag>, Serializable {
   private static final long serialVersionUID = 4941722287359138768L;
 
   private String epc;
+  private String tagId;
   private String userMemory;
 
   Tag() {
@@ -29,12 +30,22 @@ public final class Tag implements Comparable<Tag>, Serializable {
     this.epc = epc;
   }
 
+  public Tag(TagBuilder builder) {
+    this(builder.epc);
+    userMemory = builder.userMemory;
+    tagId = builder.tagId;
+  }
+
   public String getEpc() {
     return ObjectUtils.defaultIfNull(epc, "").toUpperCase();
   }
 
   public String getUserMemory() {
     return ObjectUtils.defaultIfNull(userMemory, "").toUpperCase();
+  }
+
+  public String getTagId() {
+    return ObjectUtils.defaultIfNull(tagId, "").toUpperCase();
   }
 
   @Override
@@ -47,7 +58,7 @@ public final class Tag implements Comparable<Tag>, Serializable {
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || (obj.getClass() != Tag.class)) {
+    if (obj == null || obj.getClass() != Tag.class) {
       return false;
     }
     Tag other = (Tag) obj;

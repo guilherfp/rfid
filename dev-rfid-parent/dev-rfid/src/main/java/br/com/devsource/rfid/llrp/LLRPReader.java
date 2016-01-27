@@ -54,6 +54,7 @@ import br.com.devsource.rfid.ReaderException;
 import br.com.devsource.rfid.ReaderUtils;
 import br.com.devsource.rfid.RfidDevice;
 import br.com.devsource.rfid.SimpleRfidDevice;
+import br.com.devsource.rfid.RfidField;
 import br.com.devsource.rfid.tag.Tag;
 
 /**
@@ -260,7 +261,7 @@ public final class LLRPReader extends AbstractRfid implements LLRPEndpoint {
   }
 
   @Override
-  public void startReader() {
+  public void startReader(RfidField... fields) {
     try {
       connect();
       deleteROSpec();

@@ -13,7 +13,7 @@ public class TagTest {
 
   @Test(expected = NullPointerException.class)
   public void testTag_EpcNulo() throws Exception {
-    new Tag(null);
+    new Tag((String) null);
   }
 
   @Test(expected = IllegalArgumentException.class)

@@ -38,7 +38,11 @@
       <artifactId>rfid-reader</artifactId>
       <version>${bri.version}</version>
     </dependency>
-
+    <dependency>
+      <groupId>com.intermec.datacollection.rfid</groupId>
+      <artifactId>rfid</artifactId>
+      <version>0.9</version>
+    </dependency>
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>

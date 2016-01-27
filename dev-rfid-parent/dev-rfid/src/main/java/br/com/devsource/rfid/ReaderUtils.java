@@ -1,21 +1,30 @@
 package br.com.devsource.rfid;
 
 /**
- * @author Guilherme Pacheco
+ * Classe utilitária para {@link Reader}
+ * @author guilherme.pacheco
  */
-public class ReaderUtils {
+public final class ReaderUtils {
+
+  private static final int CEM_PORCENTO = 100;
 
   private ReaderUtils() {
     super();
   }
 
-  public static int scale(double porcentage, int max) {
+  /**
+   * Obtem uma valor percentual com base em um valor máximo
+   * @param porcentage Porcentagem da potência desejada.
+   * @param maxValue Potência máxima.
+   * @return Potência desejada.
+   */
+  public static int scale(double porcentage, int maxValue) {
     if (porcentage <= 0) {
       return 0;
-    } else if (porcentage >= 100) {
-      return max;
+    } else if (porcentage >= CEM_PORCENTO) {
+      return maxValue;
     } else {
-      return (int) (max * (porcentage / 100));
+      return (int) (maxValue * (porcentage / CEM_PORCENTO));
     }
   }
 
