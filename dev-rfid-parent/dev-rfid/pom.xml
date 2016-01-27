@@ -14,6 +14,7 @@
 
   <properties>
     <llrp.version>1.0.0.7</llrp.version>
+    <bri.version>1.0</bri.version>
     <log4j-over-slf4j.version>1.7.12</log4j-over-slf4j.version>
   </properties>
 
@@ -28,8 +29,25 @@
       <version>${llrp.version}</version>
     </dependency>
     <dependency>
+      <groupId>com.intermec.datacollection.rfid</groupId>
+      <artifactId>basic-rfid</artifactId>
+      <version>${bri.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.intermec.datacollection.rfid</groupId>
+      <artifactId>rfid-reader</artifactId>
+      <version>${bri.version}</version>
+    </dependency>
+
+    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.1.3</version>
+      <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
