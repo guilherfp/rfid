@@ -108,11 +108,11 @@
 
   <distributionManagement>
     <repository>
-      <id>devsource.releases</id>
+      <id>devsource-releases</id>
       <url>http://devsource.com.br:8081/nexus/content/repositories/releases</url>
     </repository>
     <snapshotRepository>
-      <id>devsource.snapshots</id>
+      <id>devsource-snapshots</id>
       <url>http://devsource.com.br:8081/nexus/content/repositories/snapshots</url>
     </snapshotRepository>
   </distributionManagement>

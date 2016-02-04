@@ -7,6 +7,9 @@ import br.com.devsource.rfid.GpiHandler;
 import br.com.devsource.rfid.Gpio;
 import br.com.devsource.rfid.GpioStatus;
 
+/**
+ * @author Guilherme Pacheco
+ */
 public class BriGpio implements Gpio {
 
   private BRIReader briReader;
@@ -27,7 +30,7 @@ public class BriGpio implements Gpio {
   @Override
   public void addGpiHandler(int numero, GpiHandler handler) {
     try {
-      briReader.setGPITrigger(new GPITrigger("READ"));
+      briReader.setGPITrigger(new GPITrigger(String.valueOf(numero)));
     } catch (BasicReaderException ex) {
       ex.printStackTrace();
     }
