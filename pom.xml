@@ -27,6 +27,7 @@
     <junit.version>4.12</junit.version>
     <llrp.version>1.0.0.7</llrp.version>
     <bri.version>1.0</bri.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
 
   <dependencies>
