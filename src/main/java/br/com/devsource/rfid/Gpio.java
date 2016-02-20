@@ -7,6 +7,6 @@ public interface Gpio {
 
   void gpo(int numero, GpioStatus status);
 
-  void addGpiHandler(int numero, GpiHandler handler);
+  void addGpiHandler(int numero, GpioStatus status, GpiHandler handler);
 
 }

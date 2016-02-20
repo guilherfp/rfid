@@ -1,28 +1,39 @@
 package br.com.devsource.rfid.bri;
 
-import br.com.devsource.rfid.SimpleReaderConfig;
-import br.com.devsource.rfid.RfidField;
-
 import java.io.PrintStream;
 
+import br.com.devsource.rfid.GpioStatus;
 import br.com.devsource.rfid.Protocol;
 import br.com.devsource.rfid.ReadEvent;
 import br.com.devsource.rfid.ReaderConfig;
 import br.com.devsource.rfid.ReaderFactory;
+import br.com.devsource.rfid.RfidField;
 import br.com.devsource.rfid.RfidModule;
 import br.com.devsource.rfid.SimpleAntennaConfig;
+import br.com.devsource.rfid.SimpleReaderConfig;
 
 public class BriTest {
 
   public static void main(String[] args) throws Exception {
-    ReaderConfig config = new SimpleReaderConfig("192.168.0.100", 0, Protocol.BRI);
+    ReaderConfig config = new SimpleReaderConfig("192.168.1.101", 0, Protocol.BRI);
     config.getAntennas().add(new SimpleAntennaConfig(1, 100));
 
     RfidModule briReader = ReaderFactory.factory(config);
 
     briReader.startReader(RfidField.EPCID, RfidField.TAGID, RfidField.ANTENNA);
-    briReader.addHandler(e -> output(e));
-    Thread.sleep(1000);
+    // briReader.addHandler(e -> output(e));
+
+    // briReader.getGpio().addGpiHandler(1, GpioStatus.ON, (numero, status) -> {
+    // });
+    briReader.getGpio().addGpiHandler(1, GpioStatus.OFF, (numero, status) -> {
+      System.out.printf("GPI: %s, %s\n", numero, status);
+    });
+    // briReader.getGpio().addGpiHandler(1, GpioStatus.OFF, (numero, status) -> {
+    // System.out.printf("GPI OFF 1: %s, %s\n", numero, status);
+    // });
+
+    System.out.println("TESTE GPI");
+    // Thread.sleep(10000);
 
     // briReader.getGpio().gpo(1, GpioStatus.ON);
     // Thread.sleep(1000);
@@ -32,7 +43,8 @@ public class BriTest {
     // Thread.sleep(1000);
     // briReader.getGpio().gpo(1, GpioStatus.OFF);
 
-    briReader.stopReader();
+    // briReader.stopReader();
+    // briReader.disconect();
   }
 
   private static PrintStream output(ReadEvent e) {

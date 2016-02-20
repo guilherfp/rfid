@@ -29,6 +29,7 @@ public final class BriReader extends AbstractRfid implements RfidModule {
 
   private static final String TCP = "tcp://";
   private BRIReader briReader;
+  private BriGpio briGpio;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BriReader.class);
 
@@ -152,7 +153,10 @@ public final class BriReader extends AbstractRfid implements RfidModule {
 
   @Override
   public Gpio getGpio() {
-    return new BriGpio(briReader);
+    if (briGpio == null) {
+      briGpio = new BriGpio(briReader);
+    }
+    return briGpio;
   }
 
 }

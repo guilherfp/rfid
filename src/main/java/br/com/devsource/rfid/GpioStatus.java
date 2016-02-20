@@ -6,6 +6,10 @@ package br.com.devsource.rfid;
 public enum GpioStatus {
 
   ON,
-  OFF
+  OFF;
+
+  public GpioStatus reverse() {
+    return equals(ON) ? OFF : ON;
+  }
 
 }
