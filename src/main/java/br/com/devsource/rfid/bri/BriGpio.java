@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.BiPredicate;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.intermec.datacollection.rfid.BRIReader;
 import com.intermec.datacollection.rfid.BasicReaderException;
 import com.intermec.datacollection.rfid.GPITrigger;
@@ -20,32 +24,37 @@ import br.com.devsource.rfid.GpioStatus;
 public class BriGpio implements Gpio, TriggerEventListener {
 
   private final BRIReader briReader;
-  private Map<Integer, GpioStatus> gpios;
   private final Map<GPITrigger, GpiHandler> handlers;
   private static Map<Integer, BiPredicate<Integer, GpioStatus>> STATES;
 
+  private static final Logger LOGGER = LoggerFactory.getLogger(BriGpio.class);
+
   static {
     STATES = new HashMap<>();
-
-    STATES.put(GPITrigger.GPILineStates.INPUT_1_HIGH, build(1, GpioStatus.ON));
-    STATES.put(GPITrigger.GPILineStates.INPUT_1_LOW, build(1, GpioStatus.OFF));
-    STATES.put(GPITrigger.GPILineStates.INPUT_2_HIGH, build(2, GpioStatus.ON));
-    STATES.put(GPITrigger.GPILineStates.INPUT_2_LOW, build(2, GpioStatus.OFF));
-    STATES.put(GPITrigger.GPILineStates.INPUT_3_HIGH, build(3, GpioStatus.ON));
-    STATES.put(GPITrigger.GPILineStates.INPUT_3_LOW, build(3, GpioStatus.OFF));
-    STATES.put(GPITrigger.GPILineStates.INPUT_4_HIGH, build(4, GpioStatus.ON));
-    STATES.put(GPITrigger.GPILineStates.INPUT_4_LOW, build(4, GpioStatus.OFF));
-  }
-
-  private static BiPredicate<Integer, GpioStatus> build(int numero, GpioStatus status) {
-    return (i, s) -> i == numero && status == s;
+    STATES.put(GPITrigger.GPILineStates.INPUT_1_LOW, build(1, GpioStatus.ON));
+    STATES.put(GPITrigger.GPILineStates.INPUT_1_HIGH, build(1, GpioStatus.OFF));
+    STATES.put(GPITrigger.GPILineStates.INPUT_2_LOW, build(2, GpioStatus.ON));
+    STATES.put(GPITrigger.GPILineStates.INPUT_2_HIGH, build(2, GpioStatus.OFF));
+    STATES.put(GPITrigger.GPILineStates.INPUT_3_LOW, build(3, GpioStatus.ON));
+    STATES.put(GPITrigger.GPILineStates.INPUT_3_HIGH, build(3, GpioStatus.OFF));
+    STATES.put(GPITrigger.GPILineStates.INPUT_4_LOW, build(4, GpioStatus.ON));
+    STATES.put(GPITrigger.GPILineStates.INPUT_4_HIGH, build(4, GpioStatus.OFF));
   }
 
   public BriGpio(BRIReader briReader) {
     briReader.addTriggerEventListener(this);
+    disableAutoPoll(briReader);
     this.briReader = briReader;
     handlers = new HashMap<>();
-    gpios = new HashMap<>();
+  }
+
+  private void disableAutoPoll(BRIReader briReader) {
+    try {
+      briReader.execute("TRIGGER DELETEALL");
+      briReader.setAutoPollTriggerEvents(false);
+    } catch (BasicReaderException ex) {
+      LOGGER.error(ex.getMessage());
+    }
   }
 
   @Override
@@ -68,11 +77,7 @@ public class BriGpio implements Gpio, TriggerEventListener {
   }
 
   private GPITrigger gpiTrigger(int numero, GpioStatus status) {
-    gpios.put(numero, status);
-    int state = 0;
-    for (Entry<Integer, GpioStatus> entry : gpios.entrySet()) {
-      state = state | lineState(entry.getKey(), entry.getValue());
-    }
+    int state = lineState(numero, status);
     String triggerName = String.valueOf(numero);
     return new GPITrigger(triggerName, state);
   }
@@ -94,10 +99,10 @@ public class BriGpio implements Gpio, TriggerEventListener {
   @Override
   public void receivedTriggerEvent(TriggerEvent event) {
 
-    System.out.println("------");
+    System.out.println("--- TRIGGER RECEIVED ---");
     System.out.println("Name: " + event.getTriggerName());
     System.out.println("State: " + event.getGpioState());
-    System.out.println("------");
+    System.out.println("--- END TRIGGER RECEIVED ---");
 
     Integer numero = Integer.valueOf(event.getTriggerName());
     GpioStatus status = status(event);
@@ -110,6 +115,10 @@ public class BriGpio implements Gpio, TriggerEventListener {
 
   private GpioStatus status(TriggerEvent event) {
     return event.getGpioState() == 1 ? GpioStatus.ON : GpioStatus.OFF;
+  }
+
+  private static BiPredicate<Integer, GpioStatus> build(int numero, GpioStatus status) {
+    return (i, s) -> i == numero && status == s;
   }
 
 }

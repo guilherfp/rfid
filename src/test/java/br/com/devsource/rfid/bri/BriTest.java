@@ -23,10 +23,11 @@ public class BriTest {
     briReader.startReader(RfidField.EPCID, RfidField.TAGID, RfidField.ANTENNA);
     // briReader.addHandler(e -> output(e));
 
-    // briReader.getGpio().addGpiHandler(1, GpioStatus.ON, (numero, status) -> {
-    // });
-    briReader.getGpio().addGpiHandler(1, GpioStatus.OFF, (numero, status) -> {
-      System.out.printf("GPI: %s, %s\n", numero, status);
+    briReader.getGpio().addGpiHandler(1, GpioStatus.ON, (numero, status) -> {
+      System.out.println("> 1 - ON");
+    });
+    briReader.getGpio().addGpiHandler(2, GpioStatus.ON, (numero, status) -> {
+      System.out.println("> 1 - OFF");
     });
     // briReader.getGpio().addGpiHandler(1, GpioStatus.OFF, (numero, status) -> {
     // System.out.printf("GPI OFF 1: %s, %s\n", numero, status);
