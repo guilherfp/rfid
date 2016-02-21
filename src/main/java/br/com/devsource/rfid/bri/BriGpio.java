@@ -24,7 +24,7 @@ import br.com.devsource.rfid.GpioStatus;
 public class BriGpio implements Gpio, TriggerEventListener {
 
   private final BRIReader briReader;
-  private final Map<GPITrigger, GpiHandler> handlers;
+  private final Map<Integer, GpiHandler> handlers;
   private static Map<Integer, BiPredicate<Integer, GpioStatus>> STATES;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BriGpio.class);
@@ -70,8 +70,8 @@ public class BriGpio implements Gpio, TriggerEventListener {
   public void addGpiHandler(int numero, GpioStatus status, GpiHandler handler) {
     try {
       GPITrigger gpiTrigger = gpiTrigger(numero, status);
-      add(gpiTrigger, handler);
-    } catch (BasicReaderException ex) {
+      add(numero, gpiTrigger, handler);
+    } catch (Exception ex) {
       ex.printStackTrace();
     }
   }
@@ -82,9 +82,9 @@ public class BriGpio implements Gpio, TriggerEventListener {
     return new GPITrigger(triggerName, state);
   }
 
-  private void add(GPITrigger gpiTrigger, GpiHandler handler) throws BasicReaderException {
-    briReader.setGPITrigger(gpiTrigger);
-    handlers.put(gpiTrigger, handler);
+  private void add(int numero, GPITrigger trigger, GpiHandler handler) throws BasicReaderException {
+    briReader.setGPITrigger(trigger);
+    handlers.put(numero, handler);
   }
 
   public static int lineState(int numero, GpioStatus status) {
@@ -98,16 +98,10 @@ public class BriGpio implements Gpio, TriggerEventListener {
 
   @Override
   public void receivedTriggerEvent(TriggerEvent event) {
-
-    System.out.println("--- TRIGGER RECEIVED ---");
-    System.out.println("Name: " + event.getTriggerName());
-    System.out.println("State: " + event.getGpioState());
-    System.out.println("--- END TRIGGER RECEIVED ---");
-
     Integer numero = Integer.valueOf(event.getTriggerName());
     GpioStatus status = status(event);
-    for (Entry<GPITrigger, GpiHandler> entry : handlers.entrySet()) {
-      if (entry.getKey().equals(event.getTriggerName())) {
+    for (Entry<Integer, GpiHandler> entry : handlers.entrySet()) {
+      if (entry.getKey() == numero) {
         entry.getValue().onEvent(numero, status);
       }
     }
@@ -121,4 +115,8 @@ public class BriGpio implements Gpio, TriggerEventListener {
     return (i, s) -> i == numero && status == s;
   }
 
+  @Override
+  public void removeGpiHandler(int numero) {
+    handlers.remove(numero);
+  }
 }
