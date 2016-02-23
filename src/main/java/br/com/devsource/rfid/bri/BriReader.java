@@ -46,7 +46,7 @@ public final class BriReader extends AbstractRfid implements RfidModule {
     }
   }
 
-  private void configReader() {
+  private void config(BRIReader briReader) {
     briReader.attributes.setANTS(antenas());
     briReader.attributes.setTagTypes(ReaderAttributes.TagTypeMask.EPC_CLASS1_G2);
     briReader.attributes.setFieldStrengthDB(potencias());
@@ -78,13 +78,19 @@ public final class BriReader extends AbstractRfid implements RfidModule {
     return potencias;
   }
 
+  private BRIReader getBriReader() throws BasicReaderException {
+    if (briReader == null) {
+      briReader = createReader(getConfig());
+    }
+    return briReader;
+  }
+
   @Override
   public void connect() {
     try {
-      if (briReader == null && !isConnected().get()) {
-        briReader = createReader(getConfig());
+      if (!isConnected().get()) {
+        config(getBriReader());
         setConnected(true);
-        configReader();
       }
     } catch (BasicReaderException ex) {
       throw new RuntimeException(ex);
@@ -95,6 +101,7 @@ public final class BriReader extends AbstractRfid implements RfidModule {
   public void startReader(RfidField... fields) {
     try {
       connect();
+      BRIReader briReader = getBriReader();
       briReader.attributes.setTagTypes(ReaderAttributes.TagTypeMask.EPC_CLASS1_G2);
       briReader.addTagEventListener(new BriTagListener(this, fields));
       briReader.startReadingTags(null, schema(fields), readOperation());
@@ -153,10 +160,13 @@ public final class BriReader extends AbstractRfid implements RfidModule {
 
   @Override
   public Gpio getGpio() {
-    if (briGpio == null) {
-      briGpio = new BriGpio(briReader);
+    try {
+      if (briGpio == null) {
+        briGpio = new BriGpio(getBriReader());
+      }
+      return briGpio;
+    } catch (BasicReaderException ex) {
+      throw new RuntimeException("Error to connect to Reader");
     }
-    return briGpio;
   }
-
 }
