@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>br.com.devsource.rfid</groupId>
-  <artifactId>dev-rfid</artifactId>
+  <artifactId>rfid</artifactId>
   <version>1.1.0-SNAPSHOT</version>
 
   <name>Devsource RFID Parent </name>

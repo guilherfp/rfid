@@ -5,8 +5,8 @@ package br.com.devsource.rfid;
  */
 public enum Mode {
 
-  UNIQUE("Leitura única"),
-  ALL("Ler tudo");
+  UNIQUE("Event read unique tag"),
+  ALL("Event read all tag");
 
   private String descricao;
 
