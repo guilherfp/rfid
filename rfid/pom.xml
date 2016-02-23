@@ -1,0 +1,84 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>br.com.devsource.rfid</groupId>
+  <artifactId>rfid</artifactId>
+  <version>2.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <name>RFID Project</name>
+  <description>Radio-Frequency IDentification</description>
+
+  <modules>
+    <module>rfid-bri</module>
+    <module>rfid-llrp</module>
+    <module>rfid-api</module>
+    <module>rfid-all</module>
+  </modules>
+
+  <organization>
+    <name>DevSource</name>
+    <url>http://devsource.com.br</url>
+  </organization>
+
+  <scm>
+    <url>scm:git:https://github.com/guilherfp/rfid.git</url>
+    <connection>scm:git:https://github.com/guilherfp/rfid.git</connection>
+    <developerConnection>scm:git:https://github.com/guilherfp/rfid.git</developerConnection>
+  </scm>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <slf4j.version>1.7.7</slf4j.version>
+    <commons-lang3.version>3.4</commons-lang3.version>
+    <log4j-over-slf4j.version>1.7.12</log4j-over-slf4j.version>
+    <junit.version>4.12</junit.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>commons-lang3</artifactId>
+        <version>${commons-lang3.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <distributionManagement>
+    <repository>
+      <id>devsource-releases</id>
+      <url>http://devsource.com.br:8081/nexus/content/repositories/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>devsource-snapshots</id>
+      <url>http://devsource.com.br:8081/nexus/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+</project>
