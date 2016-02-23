@@ -11,10 +11,10 @@
   <description>Radio-Frequency IDentification</description>
 
   <modules>
-    <module>bri</module>
-    <module>llrp</module>
-    <module>api</module>
-    <module>all</module>
+    <module>rfid-bri</module>
+    <module>rfid-llrp</module>
+    <module>rfid-api</module>
+    <module>rfid-all</module>
   </modules>
 
   <organization>
