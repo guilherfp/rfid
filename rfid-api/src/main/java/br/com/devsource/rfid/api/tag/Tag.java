@@ -1,7 +1,5 @@
 package br.com.devsource.rfid.api.tag;
 
-import java.io.Serializable;
-
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -9,8 +7,7 @@ import org.apache.commons.lang3.Validate;
 /**
  * @author Guilherme Pacheco
  */
-public final class Tag implements Comparable<Tag>, Serializable {
-  private static final long serialVersionUID = 4941722287359138768L;
+public final class Tag implements Comparable<Tag> {
 
   private String epc;
   private String tagId;
@@ -37,7 +34,7 @@ public final class Tag implements Comparable<Tag>, Serializable {
   }
 
   public String getEpc() {
-    return ObjectUtils.defaultIfNull(epc, "").toUpperCase();
+    return epc.toUpperCase();
   }
 
   public String getUserMemory() {

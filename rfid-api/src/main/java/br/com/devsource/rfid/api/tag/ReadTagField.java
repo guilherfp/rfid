@@ -1,6 +1,9 @@
 package br.com.devsource.rfid.api.tag;
 
-public enum TagField {
+/**
+ * @author Guilherme Pacheco
+ */
+public enum ReadTagField {
 
   EPCID,
   TAGID,

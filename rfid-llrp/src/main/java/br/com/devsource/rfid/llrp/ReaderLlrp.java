@@ -1,7 +1,7 @@
 package br.com.devsource.rfid.llrp;
 
-import br.com.devsource.rfid.api.tag.TagField;
-import br.com.devsource.rfid.api.Connection;
+import br.com.devsource.rfid.api.ConnectionState;
+import br.com.devsource.rfid.api.ReadCommand;
 import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
 import br.com.devsource.rfid.api.event.ReadHandler;
@@ -15,7 +15,7 @@ public final class ReaderLlrp implements Reader {
   }
 
   @Override
-  public Connection getConnection() {
+  public ConnectionState getState() {
     // TODO Auto-generated method stub
     return null;
   }
@@ -33,7 +33,7 @@ public final class ReaderLlrp implements Reader {
   }
 
   @Override
-  public void start(TagField... fields) {
+  public void start(ReadCommand command) {
     // TODO Auto-generated method stub
 
   }

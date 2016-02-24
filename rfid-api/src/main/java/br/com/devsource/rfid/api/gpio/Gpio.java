@@ -5,10 +5,10 @@ package br.com.devsource.rfid.api.gpio;
  */
 public interface Gpio {
 
-  void gpo(int numero, GpioStatus status);
+  void gpo(int number, GpioStatus status);
 
-  void addGpiHandler(int numero, GpioStatus status, GpiHandler handler);
+  void addGpiHandler(int number, GpioStatus status, GpiHandler handler);
 
-  void removeGpiHandler(GpiHandler handler);
+  void removeGpiHandler(int number);
 
 }

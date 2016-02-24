@@ -1,22 +1,21 @@
 package br.com.devsource.rfid.api;
 
 import br.com.devsource.rfid.api.event.ReadHandler;
-import br.com.devsource.rfid.api.tag.TagField;
 
 /**
  * @author Guilherme Pacheco
  */
 public interface Reader {
 
-  Connection getConnection();
+  ConnectionState getState();
 
-  void connect();
+  void connect() throws RfidConnectionException;
 
-  void disconnect();
+  void disconnect() throws RfidConnectionException;
 
-  void start(TagField... fields);
+  void start(ReadCommand command) throws RfidConnectionException;
 
-  void stop();
+  void stop() throws RfidConnectionException;
 
   ReaderConf getConf();
 

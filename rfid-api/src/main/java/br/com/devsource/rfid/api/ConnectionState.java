@@ -3,7 +3,7 @@ package br.com.devsource.rfid.api;
 /**
  * @author Guilherme Pacheco
  */
-public enum Connection {
+public enum ConnectionState {
 
   CONNECTED,
   DISCONNECTED
