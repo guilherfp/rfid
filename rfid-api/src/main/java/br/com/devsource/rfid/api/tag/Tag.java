@@ -20,14 +20,14 @@ public final class Tag implements Comparable<Tag>, Serializable {
     super();
   }
 
-  public Tag(String epc, String userMemory) {
-    this(epc);
-    this.userMemory = userMemory;
-  }
-
   public Tag(String epc) {
     Validate.notBlank(epc);
     this.epc = epc;
+  }
+
+  public Tag(String epc, String userMemory) {
+    this(epc);
+    this.userMemory = userMemory;
   }
 
   public Tag(TagBuilder builder) {

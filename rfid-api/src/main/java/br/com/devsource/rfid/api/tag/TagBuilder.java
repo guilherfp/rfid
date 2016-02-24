@@ -1,5 +1,8 @@
 package br.com.devsource.rfid.api.tag;
 
+/**
+ * @author Guilherme Pacheco
+ */
 public class TagBuilder {
 
   String epc;
