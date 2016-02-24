@@ -11,14 +11,14 @@ import br.com.devsource.rfid.api.tag.Tag;
 public class ReadEvent {
 
   private final Tag tag;
-  private final int antena;
+  private final int antenna;
   private final ReaderConf conf;
 
-  public ReadEvent(Tag tag, ReaderConf conf, int antena) {
+  public ReadEvent(Tag tag, ReaderConf conf, int antenna) {
     Validate.notNull(conf);
     Validate.notNull(tag);
     this.conf = conf;
-    this.antena = antena;
+    this.antenna = antenna;
     this.tag = tag;
   }
 
@@ -26,8 +26,8 @@ public class ReadEvent {
     return conf;
   }
 
-  public int getAntena() {
-    return antena;
+  public int getAntenna() {
+    return antenna;
   }
 
   public Tag getTag() {
@@ -36,7 +36,7 @@ public class ReadEvent {
 
   @Override
   public String toString() {
-    return String.format("Reader: %s, antenna: %s, %s", configString(), antena, tag);
+    return String.format("Reader: %s, antenna: %s, %s", configString(), antenna, tag);
   }
 
   private String configString() {

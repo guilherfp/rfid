@@ -1,6 +1,7 @@
 package br.com.devsource.rfid.api;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import br.com.devsource.rfid.api.tag.ReadTagField;
@@ -56,8 +57,8 @@ public class ReadCommand {
       return this;
     }
 
-    public ReadCommandBuilder add(ReadTagField field) {
-      fields.add(field);
+    public ReadCommandBuilder add(ReadTagField... fields) {
+      this.fields.addAll(Arrays.asList(fields));
       return this;
     }
 
