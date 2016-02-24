@@ -18,6 +18,10 @@
 
   <dependencies>
     <dependency>
+      <groupId>br.com.devsource.rfid</groupId>
+      <artifactId>rfid-api</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.llrp.ltk</groupId>
       <artifactId>llrp-toolkit</artifactId>
       <version>${llrp.version}</version>

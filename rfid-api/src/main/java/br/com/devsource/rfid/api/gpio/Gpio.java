@@ -9,6 +9,6 @@ public interface Gpio {
 
   void addGpiHandler(int numero, GpioStatus status, GpiHandler handler);
 
-  void removeGpiHandler(int numero);
+  void removeGpiHandler(GpiHandler handler);
 
 }
