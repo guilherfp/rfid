@@ -11,28 +11,65 @@ import br.com.devsource.rfid.api.tag.ReadTagField;
 public class ReadCommand {
 
   private List<ReadTagField> fields;
-  private ReadMode mode;
+  private ReadMode readMode;
 
   public ReadCommand() {
     fields = new ArrayList<>();
-    mode = ReadMode.UNIQUE;
+    readMode = ReadMode.UNIQUE;
+  }
+
+  public ReadCommand(ReadCommandBuilder builder) {
+    fields = builder.fields;
+    readMode = builder.readMode;
   }
 
   public List<ReadTagField> getFields() {
     return new ArrayList<>(fields);
   }
 
-  public void addField(ReadTagField field) {
-    fields.add(field);
-  }
-
-  public ReadMode getMode() {
-    return mode;
+  public ReadMode getReadMode() {
+    return readMode;
   }
 
   @Override
   public String toString() {
-    return String.format("ReadCommand [fields: %s, mode: %s]", fields, mode);
+    return String.format("ReadCommand [fields: %s, mode: %s]", fields, readMode);
   }
 
+  public static class ReadCommandBuilder {
+
+    private List<ReadTagField> fields = new ArrayList<>();
+    private ReadMode readMode = ReadMode.UNIQUE;
+
+    private ReadCommandBuilder() {
+      super();
+    }
+
+    public ReadCommandBuilder fields(List<ReadTagField> fields) {
+      if (fields != null) {
+        this.fields = fields;
+      }
+      return this;
+    }
+
+    public ReadCommandBuilder add(ReadTagField field) {
+      fields.add(field);
+      return this;
+    }
+
+    public ReadCommandBuilder readMode(ReadMode readMode) {
+      if (readMode != null) {
+        this.readMode = readMode;
+      }
+      return this;
+    }
+
+    public static ReadCommandBuilder create() {
+      return new ReadCommandBuilder();
+    }
+
+    public ReadCommand build() {
+      return new ReadCommand(this);
+    }
+  }
 }

@@ -23,6 +23,10 @@
       <artifactId>rfid-api</artifactId>
     </dependency>
     <dependency>
+      <groupId>br.com.devsource.rfid</groupId>
+      <artifactId>rfid-core</artifactId>
+    </dependency>
+    <dependency>
       <groupId>com.intermec.datacollection.rfid</groupId>
       <artifactId>basic-rfid</artifactId>
       <version>${bri.version}</version>

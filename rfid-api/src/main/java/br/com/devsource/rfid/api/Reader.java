@@ -21,6 +21,6 @@ public interface Reader {
 
   void addHandler(ReadHandler handler);
 
-  void eventHandler(ReadHandler handler);
+  void removeHandler(ReadHandler handler);
 
 }

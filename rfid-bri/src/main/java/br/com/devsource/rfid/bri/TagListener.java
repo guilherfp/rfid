@@ -1,7 +1,5 @@
 package br.com.devsource.rfid.bri;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 import org.apache.commons.lang3.StringUtils;
@@ -11,6 +9,7 @@ import com.intermec.datacollection.rfid.TagEvent;
 import com.intermec.datacollection.rfid.TagEventListener;
 import com.intermec.datacollection.rfid.TagField;
 
+import br.com.devsource.rfid.api.ReadCommand;
 import br.com.devsource.rfid.api.tag.ReadTagField;
 import br.com.devsource.rfid.api.tag.Tag;
 import br.com.devsource.rfid.api.tag.TagBuilder;
@@ -21,11 +20,11 @@ import br.com.devsource.rfid.api.tag.TagBuilder;
 class TagListener implements TagEventListener {
 
   private final ReaderBri readerBri;
-  private final List<ReadTagField> rfidFields;
+  private final ReadCommand command;
 
-  public TagListener(ReaderBri readerBri, ReadTagField[] fields) {
-    rfidFields = Arrays.asList(fields);
+  public TagListener(ReaderBri readerBri, ReadCommand command) {
     this.readerBri = readerBri;
+    this.command = command;
   }
 
   @Override
@@ -58,8 +57,8 @@ class TagListener implements TagEventListener {
   }
 
   private Optional<TagField> extract(TagEvent event, ReadTagField tagField) {
-    if (rfidFields.contains(tagField)) {
-      int index = rfidFields.indexOf(tagField);
+    if (command.getFields().contains(tagField)) {
+      int index = command.getFields().indexOf(tagField);
       return Optional.ofNullable(event.getTag().tagFields.getField(index));
     } else {
       return Optional.empty();
@@ -69,5 +68,4 @@ class TagListener implements TagEventListener {
   private String fromHex(String hexValue) {
     return StringUtils.removeStartIgnoreCase(hexValue, "H");
   }
-
 }

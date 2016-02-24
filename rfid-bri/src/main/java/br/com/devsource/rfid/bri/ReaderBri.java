@@ -1,24 +1,23 @@
 package br.com.devsource.rfid.bri;
 
-import java.util.Set;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.intermec.datacollection.rfid.BRIParserException;
 import com.intermec.datacollection.rfid.BRIReader;
 import com.intermec.datacollection.rfid.BasicReaderException;
 import com.intermec.datacollection.rfid.ReaderAttributes;
 
-import br.com.devsource.rfid.api.Antenna;
 import br.com.devsource.rfid.api.ConnectionState;
 import br.com.devsource.rfid.api.HasGpio;
 import br.com.devsource.rfid.api.ReadCommand;
 import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
-import br.com.devsource.rfid.api.ReaderUtils;
 import br.com.devsource.rfid.api.RfidConnectionException;
+import br.com.devsource.rfid.api.RfidException;
 import br.com.devsource.rfid.api.event.ReadHandler;
 import br.com.devsource.rfid.api.gpio.Gpio;
+import br.com.devsource.rfid.core.ReadEventDispatcher;
 
 /**
  * @author Guilherme Pacheco
@@ -27,13 +26,19 @@ public class ReaderBri implements Reader, HasGpio {
 
   private final BriReaderBuilder builder;
   private ConnectionState state = ConnectionState.DISCONNECTED;
+  private final ReadEventDispatcher dispatcher = new ReadEventDispatcher();
   private BriGpio briGpio;
 
-  private static final int MAX_POWER = 30;
   private static final Logger LOGGER = LoggerFactory.getLogger(ReaderBri.class);
 
   public ReaderBri(ReaderConf conf) {
     builder = new BriReaderBuilder(conf);
+  }
+
+  private void config(BRIReader reader) {
+    reader.attributes.setANTS(BriUtils.ants(getConf()));
+    reader.attributes.setTagTypes(ReaderAttributes.TagTypeMask.EPC_CLASS1_G2);
+    reader.attributes.setFieldStrengthDB(BriUtils.strength(getConf()));
   }
 
   @Override
@@ -49,44 +54,25 @@ public class ReaderBri implements Reader, HasGpio {
     }
   }
 
-  private void config(BRIReader briReader) {
-    briReader.attributes.setANTS(antenas());
-    briReader.attributes.setTagTypes(ReaderAttributes.TagTypeMask.EPC_CLASS1_G2);
-    briReader.attributes.setFieldStrengthDB(potencias());
-  }
-
-  private int[] antenas() {
-    Set<Antenna> antennas = builder.getConf().getActivesAntennas();
-    int[] antenas = new int[antennas.size()];
-    int index = 0;
-    for (Antenna antena : antennas) {
-      antenas[index] = antena.getNumber();
-      index++;
-    }
-    return antenas;
-  }
-
-  private int[] potencias() {
-    Set<Antenna> antennas = builder.getConf().getActivesAntennas();
-    int[] potencias = new int[antennas.size()];
-    int index = 0;
-    for (Antenna antena : antennas) {
-      potencias[index] = ReaderUtils.scale(antena.getTransmitPower(), MAX_POWER);
-      index++;
-    }
-    return potencias;
-  }
-
   @Override
   public void disconnect() throws RfidConnectionException {
-    // TODO Auto-generated method stub
-
+    builder.ifPresent(r -> {
+      r.dispose();
+      state = ConnectionState.DISCONNECTED;
+    });
   }
 
   @Override
   public void start(ReadCommand command) throws RfidConnectionException {
-    // TODO Auto-generated method stub
-
+    try {
+      builder.get().addTagEventListener(new TagListener(this, command));
+      builder.get().attributes.setTagTypes(ReaderAttributes.TagTypeMask.EPC_CLASS1_G2);
+      builder.get().startReadingTags(null, BriUtils.schema(command), BriUtils.operation(command));
+    } catch (BRIParserException ex) {
+      throw new RfidException(getConf(), "Invalid reading schema");
+    } catch (BasicReaderException ex) {
+      throw new RfidConnectionException(getConf(), ex);
+    }
   }
 
   @Override
@@ -106,14 +92,12 @@ public class ReaderBri implements Reader, HasGpio {
 
   @Override
   public void addHandler(ReadHandler handler) {
-    // TODO Auto-generated method stub
-
+    dispatcher.add(handler);
   }
 
   @Override
-  public void eventHandler(ReadHandler handler) {
-    // TODO Auto-generated method stub
-
+  public void removeHandler(ReadHandler handler) {
+    dispatcher.remove(handler);
   }
 
   @Override
@@ -123,5 +107,4 @@ public class ReaderBri implements Reader, HasGpio {
     }
     return briGpio;
   }
-
 }

@@ -57,7 +57,7 @@ public final class ReaderLlrp implements Reader {
   }
 
   @Override
-  public void eventHandler(ReadHandler handler) {
+  public void removeHandler(ReadHandler handler) {
     // TODO Auto-generated method stub
 
   }

@@ -1,5 +1,10 @@
 package br.com.devsource.rfid.bri;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Consumer;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
@@ -15,7 +20,8 @@ import br.com.devsource.rfid.api.RfidConnectionException;
 class BriReaderBuilder {
 
   private final ReaderConf conf;
-  private BRIReader briReader;
+  private Optional<BRIReader> briReader = Optional.empty();
+  private List<Consumer<BRIReader>> consumers = new ArrayList<>();
 
   private static final String TCP = "tcp://";
 
@@ -29,10 +35,24 @@ class BriReaderBuilder {
   }
 
   public BRIReader get() {
-    if (briReader == null) {
-      briReader = create();
+    if (!briReader.isPresent()) {
+      BRIReader reader = create();
+      consumers.forEach(c -> c.accept(reader));
+      briReader = Optional.of(reader);
     }
-    return briReader;
+    return briReader.get();
+  }
+
+  public void ifPresent(Consumer<BRIReader> consumer) {
+    briReader.ifPresent(consumer);
+  }
+
+  public void config(Consumer<BRIReader> consumer) {
+    if (briReader.isPresent()) {
+      consumer.accept(briReader.get());
+    } else {
+      consumers.add(consumer);
+    }
   }
 
   private BRIReader create() {
@@ -47,5 +67,4 @@ class BriReaderBuilder {
       throw new RfidConnectionException(conf, ex);
     }
   }
-
 }

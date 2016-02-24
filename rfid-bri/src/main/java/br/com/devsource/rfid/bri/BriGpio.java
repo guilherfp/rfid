@@ -31,12 +31,14 @@ class BriGpio implements Gpio, TriggerEventListener {
 
   public BriGpio(BriReaderBuilder builder) {
     this.builder = builder;
-    config(builder);
+    builder.config(config());
   }
 
-  private void config(BriReaderBuilder builder) {
-    disableAutoPoll(builder.get());
-    builder.get().addTriggerEventListener(this);
+  private Consumer<BRIReader> config() {
+    return reader -> {
+      disableAutoPoll(reader);
+      reader.addTriggerEventListener(this);
+    };
   }
 
   private void disableAutoPoll(BRIReader briReader) {
