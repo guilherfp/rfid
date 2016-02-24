@@ -60,6 +60,7 @@ public class ReaderBri implements Reader, HasGpio {
   @Override
   public void disconnect() throws RfidConnectionException {
     builder.ifPresent(r -> {
+      stop();
       r.dispose();
       state = ConnectionState.DISCONNECTED;
     });
@@ -68,9 +69,11 @@ public class ReaderBri implements Reader, HasGpio {
   @Override
   public void start(ReadCommand command) throws RfidConnectionException {
     try {
+      connect();
       builder.get().addTagEventListener(new TagListener(this, command));
-      builder.get().attributes.setTagTypes(ReaderAttributes.TagTypeMask.EPC_CLASS1_G2);
-      builder.get().startReadingTags(null, BriUtils.schema(command), BriUtils.operation(command));
+      String schema = BriUtils.schema(command);
+      int operation = BriUtils.operation(command);
+      builder.get().startReadingTags(null, schema, operation);
     } catch (BRIParserException ex) {
       throw new RfidException(getConf(), "Invalid reading schema");
     } catch (BasicReaderException ex) {

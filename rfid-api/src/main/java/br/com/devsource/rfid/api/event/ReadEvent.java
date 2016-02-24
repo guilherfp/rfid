@@ -12,18 +12,18 @@ public class ReadEvent {
 
   private final Tag tag;
   private final int antena;
-  private final ReaderConf config;
+  private final ReaderConf conf;
 
-  public ReadEvent(Tag tag, ReaderConf config, int antena) {
-    Validate.notNull(config);
+  public ReadEvent(Tag tag, ReaderConf conf, int antena) {
+    Validate.notNull(conf);
     Validate.notNull(tag);
-    this.config = config;
+    this.conf = conf;
     this.antena = antena;
     this.tag = tag;
   }
 
-  public ReaderConf getConfig() {
-    return config;
+  public ReaderConf getConf() {
+    return conf;
   }
 
   public int getAntena() {
@@ -36,8 +36,11 @@ public class ReadEvent {
 
   @Override
   public String toString() {
-    return String
-      .format("Leitor: %s, antena: %s, %s", config.getHostname(), antena, tag.toString());
+    return String.format("Reader: %s, antenna: %s, %s", configString(), antena, tag);
+  }
+
+  private String configString() {
+    return String.format("%s:%s", conf.getHostname(), conf.getPort());
   }
 
 }
