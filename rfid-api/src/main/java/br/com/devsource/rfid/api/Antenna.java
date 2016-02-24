@@ -1,4 +1,4 @@
-package br.com.devsource.rfid.api.module;
+package br.com.devsource.rfid.api;
 
 /**
  * @author Guilherme Pacheco

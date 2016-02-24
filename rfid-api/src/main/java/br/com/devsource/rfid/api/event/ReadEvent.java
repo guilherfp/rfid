@@ -2,7 +2,7 @@ package br.com.devsource.rfid.api.event;
 
 import org.apache.commons.lang3.Validate;
 
-import br.com.devsource.rfid.api.module.ReaderConf;
+import br.com.devsource.rfid.api.ReaderConf;
 import br.com.devsource.rfid.api.tag.Tag;
 
 /**

@@ -2,8 +2,8 @@ package br.com.devsource.rfid.all;
 
 import org.apache.commons.lang3.Validate;
 
-import br.com.devsource.rfid.api.module.ReaderConf;
-import br.com.devsource.rfid.api.module.Reader;
+import br.com.devsource.rfid.api.Reader;
+import br.com.devsource.rfid.api.ReaderConf;
 import br.com.devsource.rfid.bri.ReaderBri;
 import br.com.devsource.rfid.llrp.ReaderLlrp;
 

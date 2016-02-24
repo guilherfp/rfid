@@ -1,4 +1,4 @@
-package br.com.devsource.rfid.api.module;
+package br.com.devsource.rfid.api;
 
 import java.util.Set;
 import java.util.stream.Collectors;
