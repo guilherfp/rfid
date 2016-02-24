@@ -30,7 +30,7 @@ import br.com.devsource.rfid.core.ReadEventDispatcher;
 public final class ReaderLlrp implements Reader {
 
   private final ReaderConf conf;
-  private final LLRPConnector connector;
+  private LLRPConnector connector;
   private final ReaderEndPoint endPoint;
   private final Capabilities capabilities;
   private final ReadEventDispatcher dispatcher;
@@ -40,12 +40,12 @@ public final class ReaderLlrp implements Reader {
   private static final Logger LOGGER = LoggerFactory.getLogger(ReaderLlrp.class);
 
   public ReaderLlrp(ReaderConf conf) {
+    this.conf = conf;
+    endPoint = new ReaderEndPoint(this);
+    connector = createConneciton(conf);
     state = ConnectionState.DISCONNECTED;
     capabilities = new Capabilities(this);
     dispatcher = new ReadEventDispatcher();
-    endPoint = new ReaderEndPoint(this);
-    connector = createConneciton(conf);
-    this.conf = conf;
   }
 
   private LLRPConnector createConneciton(ReaderConf conf) {
@@ -76,8 +76,10 @@ public final class ReaderLlrp implements Reader {
   @Override
   public void disconnect() {
     try {
+      stop();
       connector.disconnect();
       state = ConnectionState.DISCONNECTED;
+      connector = null;
     } catch (Exception ex) {
       throw new RfidConnectionException(getConf(), ex);
     }

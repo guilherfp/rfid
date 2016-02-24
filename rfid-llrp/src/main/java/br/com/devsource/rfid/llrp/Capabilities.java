@@ -25,7 +25,6 @@ class Capabilities {
 
   public Capabilities(ReaderLlrp readerLlrp) {
     this.readerLlrp = readerLlrp;
-    load();
   }
 
   public void load(GET_READER_CAPABILITIES_RESPONSE capabilities) {
