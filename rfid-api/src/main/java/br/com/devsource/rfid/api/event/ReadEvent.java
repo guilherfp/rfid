@@ -15,11 +15,11 @@ public class ReadEvent {
   private final ReaderConf config;
 
   public ReadEvent(Tag tag, ReaderConf config, int antena) {
-    Validate.notNull(tag);
     Validate.notNull(config);
-    this.tag = tag;
+    Validate.notNull(tag);
     this.config = config;
     this.antena = antena;
+    this.tag = tag;
   }
 
   public ReaderConf getConfig() {

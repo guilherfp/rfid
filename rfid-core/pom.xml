@@ -16,6 +16,10 @@
       <groupId>br.com.devsource.rfid</groupId>
       <artifactId>rfid-api</artifactId>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+    </dependency>
   </dependencies>
 
 </project>

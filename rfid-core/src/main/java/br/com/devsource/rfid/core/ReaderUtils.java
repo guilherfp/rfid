@@ -1,4 +1,4 @@
-package br.com.devsource.rfid.api;
+package br.com.devsource.rfid.core;
 
 /**
  * Classe utilitária para {@link Reader}

@@ -10,6 +10,7 @@ import com.intermec.datacollection.rfid.TagEventListener;
 import com.intermec.datacollection.rfid.TagField;
 
 import br.com.devsource.rfid.api.ReadCommand;
+import br.com.devsource.rfid.api.event.ReadEvent;
 import br.com.devsource.rfid.api.tag.ReadTagField;
 import br.com.devsource.rfid.api.tag.Tag;
 import br.com.devsource.rfid.api.tag.TagBuilder;
@@ -31,7 +32,8 @@ class TagListener implements TagEventListener {
   public void tagRead(TagEvent event) {
     Tag tag = createTag(event);
     int antena = antena(event);
-    // readerBri.onReadTag(createTag(event), antena(event));
+    ReadEvent readEvent = new ReadEvent(tag, readerBri.getConf(), antena);
+    readerBri.onRead(readEvent);
   }
 
   private int antena(TagEvent event) {

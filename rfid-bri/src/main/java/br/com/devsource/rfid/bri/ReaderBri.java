@@ -15,6 +15,7 @@ import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
 import br.com.devsource.rfid.api.RfidConnectionException;
 import br.com.devsource.rfid.api.RfidException;
+import br.com.devsource.rfid.api.event.ReadEvent;
 import br.com.devsource.rfid.api.event.ReadHandler;
 import br.com.devsource.rfid.api.gpio.Gpio;
 import br.com.devsource.rfid.core.ReadEventDispatcher;
@@ -98,6 +99,10 @@ public class ReaderBri implements Reader, HasGpio {
   @Override
   public void removeHandler(ReadHandler handler) {
     dispatcher.remove(handler);
+  }
+
+  void onRead(ReadEvent event) {
+    dispatcher.onRead(event);
   }
 
   @Override

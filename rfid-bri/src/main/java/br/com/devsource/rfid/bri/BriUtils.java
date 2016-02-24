@@ -9,8 +9,8 @@ import br.com.devsource.rfid.api.Antenna;
 import br.com.devsource.rfid.api.ReadCommand;
 import br.com.devsource.rfid.api.ReadMode;
 import br.com.devsource.rfid.api.ReaderConf;
-import br.com.devsource.rfid.api.ReaderUtils;
 import br.com.devsource.rfid.api.tag.ReadTagField;
+import br.com.devsource.rfid.core.ReaderUtils;
 
 /**
  * @author Guilherme Pacheco
