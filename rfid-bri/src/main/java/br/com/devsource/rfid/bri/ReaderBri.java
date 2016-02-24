@@ -25,14 +25,16 @@ import br.com.devsource.rfid.core.ReadEventDispatcher;
  */
 public class ReaderBri implements Reader, HasGpio {
 
+  private final ReadEventDispatcher dispatcher;
   private final BriReaderBuilder builder;
-  private ConnectionState state = ConnectionState.DISCONNECTED;
-  private final ReadEventDispatcher dispatcher = new ReadEventDispatcher();
+  private ConnectionState state;
   private BriGpio briGpio;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ReaderBri.class);
 
   public ReaderBri(ReaderConf conf) {
+    state = ConnectionState.DISCONNECTED;
+    dispatcher = new ReadEventDispatcher();
     builder = new BriReaderBuilder(conf);
   }
 

@@ -27,6 +27,10 @@ public class ReadCommand {
     return new ArrayList<>(fields);
   }
 
+  public boolean contains(ReadTagField field) {
+    return fields.contains(field);
+  }
+
   public ReadMode getReadMode() {
     return readMode;
   }

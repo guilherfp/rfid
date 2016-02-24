@@ -60,7 +60,7 @@ class TagListener implements TagEventListener {
   }
 
   private Optional<TagField> extract(TagEvent event, ReadTagField tagField) {
-    if (command.getFields().contains(tagField)) {
+    if (command.contains(tagField)) {
       int index = command.getFields().indexOf(tagField);
       return Optional.ofNullable(event.getTag().tagFields.getField(index));
     } else {

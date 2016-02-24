@@ -2,8 +2,9 @@ package br.com.devsource.rfid.bri;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.function.BiPredicate;
+
+import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.intermec.datacollection.rfid.GPITrigger;
 
@@ -36,13 +37,11 @@ class GpiStates {
     return (i, s) -> i == numero && status == s;
   }
 
-  public static int lineState(int numero, GpioStatus status) {
-    for (Entry<Integer, BiPredicate<Integer, GpioStatus>> entry : STATES.entrySet()) {
-      if (entry.getValue().test(numero, status)) {
-        return entry.getKey();
-      }
-    }
-    return 0;
+  public static int lineState(int number, GpioStatus status) {
+    MutableInt value = new MutableInt(0);
+    STATES.entrySet().stream().filter(e -> e.getValue().test(number, status)).findFirst()
+      .ifPresent(e -> value.setValue(e.getKey()));
+    return value.getValue();
   }
 
 }
