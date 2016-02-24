@@ -6,25 +6,25 @@ package br.com.devsource.rfid.core;
  */
 public final class ReaderUtils {
 
-  private static final int CEM_PORCENTO = 100;
+  private static final int MAX = 100;
 
   private ReaderUtils() {
     super();
   }
 
   /**
-   * Obtem uma valor percentual com base em um valor máximo
-   * @param value Porcentagem da potência desejada.
-   * @param maxValue Potência máxima.
-   * @return Potência desejada.
+   * Gets a percentage value based on a maximum value
+   * @param value Percentage of desired power.
+   * @param maxValue Maximum power.
+   * @return desired power.
    */
   public static int scale(double value, int maxValue) {
     if (value <= 0) {
       return 0;
-    } else if (value >= CEM_PORCENTO) {
+    } else if (value >= MAX) {
       return maxValue;
     } else {
-      return (int) (maxValue * (value / CEM_PORCENTO));
+      return (int) (maxValue * (value / MAX));
     }
   }
 

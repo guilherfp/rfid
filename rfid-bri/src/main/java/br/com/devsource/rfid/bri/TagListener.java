@@ -20,6 +20,7 @@ import br.com.devsource.rfid.api.tag.TagBuilder;
  */
 class TagListener implements TagEventListener {
 
+  private static final String HEX_PREFIX = "H";
   private final ReaderBri readerBri;
   private final ReadCommand command;
 
@@ -68,6 +69,6 @@ class TagListener implements TagEventListener {
   }
 
   private String fromHex(String hexValue) {
-    return StringUtils.removeStartIgnoreCase(hexValue, "H");
+    return StringUtils.removeStartIgnoreCase(hexValue, HEX_PREFIX);
   }
 }
