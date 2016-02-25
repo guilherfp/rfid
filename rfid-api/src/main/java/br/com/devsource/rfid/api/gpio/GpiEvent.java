@@ -5,16 +5,16 @@ package br.com.devsource.rfid.api.gpio;
  */
 public class GpiEvent {
 
-  private final int numero;
+  private final int number;
   private final GpioStatus status;
 
-  public GpiEvent(int numero, GpioStatus status) {
-    this.numero = numero;
+  public GpiEvent(int number, GpioStatus status) {
+    this.number = number;
     this.status = status;
   }
 
-  public int getNumero() {
-    return numero;
+  public int getNumber() {
+    return number;
   }
 
   public GpioStatus getStatus() {
@@ -23,7 +23,7 @@ public class GpiEvent {
 
   @Override
   public String toString() {
-    return String.format("GpiEvent [numero: %s, status: %s]", numero, status);
+    return String.format("GpiEvent [number: %s, status: %s]", number, status);
   }
 
 }

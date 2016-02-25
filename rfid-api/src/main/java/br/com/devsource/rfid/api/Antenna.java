@@ -9,6 +9,8 @@ public interface Antenna {
 
   int getTransmitPower();
 
-  boolean isActive();
+  default boolean isActive() {
+    return true;
+  }
 
 }

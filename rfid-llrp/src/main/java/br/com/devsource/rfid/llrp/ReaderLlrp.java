@@ -17,17 +17,18 @@ import org.slf4j.LoggerFactory;
 
 import br.com.devsource.rfid.api.ConnectionState;
 import br.com.devsource.rfid.api.ReadCommand;
-import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
+import br.com.devsource.rfid.api.ReaderGpio;
 import br.com.devsource.rfid.api.RfidConnectionException;
 import br.com.devsource.rfid.api.event.ReadEvent;
 import br.com.devsource.rfid.api.event.ReadHandler;
+import br.com.devsource.rfid.api.gpio.Gpio;
 import br.com.devsource.rfid.core.ReadEventDispatcher;
 
 /**
  * @author Guilherme Pacheco
  */
-public final class ReaderLlrp implements Reader {
+public final class ReaderLlrp implements ReaderGpio {
 
   private final ReaderConf conf;
   private LLRPConnector connector;
@@ -57,7 +58,7 @@ public final class ReaderLlrp implements Reader {
   }
 
   @Override
-  public ConnectionState getState() {
+  public ConnectionState getConnectionState() {
     return state;
   }
 
@@ -177,5 +178,10 @@ public final class ReaderLlrp implements Reader {
 
   void onRead(ReadEvent event) {
     dispatcher.onRead(event);
+  }
+
+  @Override
+  public Gpio getGpio() {
+    throw new UnsupportedOperationException("Operation is not supported");
   }
 }

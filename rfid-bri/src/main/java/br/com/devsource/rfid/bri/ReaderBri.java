@@ -9,10 +9,9 @@ import com.intermec.datacollection.rfid.BasicReaderException;
 import com.intermec.datacollection.rfid.ReaderAttributes;
 
 import br.com.devsource.rfid.api.ConnectionState;
-import br.com.devsource.rfid.api.HasGpio;
 import br.com.devsource.rfid.api.ReadCommand;
-import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
+import br.com.devsource.rfid.api.ReaderGpio;
 import br.com.devsource.rfid.api.RfidConnectionException;
 import br.com.devsource.rfid.api.RfidException;
 import br.com.devsource.rfid.api.event.ReadEvent;
@@ -23,7 +22,7 @@ import br.com.devsource.rfid.core.ReadEventDispatcher;
 /**
  * @author Guilherme Pacheco
  */
-public class ReaderBri implements Reader, HasGpio {
+public class ReaderBri implements ReaderGpio {
 
   private final ReadEventDispatcher dispatcher;
   private final BriReaderBuilder builder;
@@ -45,7 +44,7 @@ public class ReaderBri implements Reader, HasGpio {
   }
 
   @Override
-  public ConnectionState getState() {
+  public ConnectionState getConnectionState() {
     return state;
   }
 

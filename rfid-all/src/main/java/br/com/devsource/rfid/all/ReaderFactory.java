@@ -2,8 +2,8 @@ package br.com.devsource.rfid.all;
 
 import org.apache.commons.lang3.Validate;
 
-import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
+import br.com.devsource.rfid.api.ReaderGpio;
 import br.com.devsource.rfid.bri.ReaderBri;
 import br.com.devsource.rfid.llrp.ReaderLlrp;
 
@@ -16,7 +16,7 @@ public class ReaderFactory {
     super();
   }
 
-  public static Reader factory(ReaderConf config, Protocol protocol) {
+  public static ReaderGpio factory(ReaderConf config, Protocol protocol) {
     Validate.notNull(protocol);
     Validate.notNull(config);
     try {

@@ -9,7 +9,7 @@ import br.com.devsource.rfid.api.tag.ReadTagField;
  */
 public interface Reader {
 
-  ConnectionState getState();
+  ConnectionState getConnectionState();
 
   void connect() throws RfidConnectionException;
 
