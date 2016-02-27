@@ -2,3 +2,5 @@
 .settings
 /.project
 /.classpath
+/rfid-core/.project
+/rfid-core/.classpath
