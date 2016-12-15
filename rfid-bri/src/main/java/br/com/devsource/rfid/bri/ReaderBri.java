@@ -3,9 +3,7 @@ package br.com.devsource.rfid.bri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.intermec.datacollection.rfid.BRIParserException;
 import com.intermec.datacollection.rfid.BRIReader;
-import com.intermec.datacollection.rfid.BasicReaderException;
 import com.intermec.datacollection.rfid.ReaderAttributes;
 
 import br.com.devsource.rfid.api.ConnectionState;
@@ -13,7 +11,6 @@ import br.com.devsource.rfid.api.ReadCommand;
 import br.com.devsource.rfid.api.ReaderConf;
 import br.com.devsource.rfid.api.ReaderGpio;
 import br.com.devsource.rfid.api.RfidConnectionException;
-import br.com.devsource.rfid.api.RfidException;
 import br.com.devsource.rfid.api.event.ReadEvent;
 import br.com.devsource.rfid.api.event.ReadHandler;
 import br.com.devsource.rfid.api.gpio.Gpio;
@@ -22,7 +19,7 @@ import br.com.devsource.rfid.core.ReadEventDispatcher;
 /**
  * @author Guilherme Pacheco
  */
-public class ReaderBri implements ReaderGpio {
+public final class ReaderBri implements ReaderGpio {
 
   private final ReadEventDispatcher dispatcher;
   private final BriReaderBuilder builder;
@@ -58,36 +55,24 @@ public class ReaderBri implements ReaderGpio {
 
   @Override
   public void disconnect() throws RfidConnectionException {
-    builder.ifPresent(r -> {
+    builder.ifPresent(reader -> {
       stop();
-      r.dispose();
+      reader.dispose();
       state = ConnectionState.DISCONNECTED;
     });
   }
 
   @Override
   public void start(ReadCommand command) throws RfidConnectionException {
-    try {
-      connect();
-      builder.get().addTagEventListener(new TagListener(this, command));
-      String schema = BriUtils.schema(command);
-      int operation = BriUtils.operation(command);
-      builder.get().startReadingTags(null, schema, operation);
-    } catch (BRIParserException ex) {
-      throw new RfidException(getConf(), "Invalid reading schema");
-    } catch (BasicReaderException ex) {
-      throw new RfidConnectionException(getConf(), ex);
-    }
+    connect();
+    builder.get().addTagEventListener(new TagListener(this, command));
+    builder.commands().startReading(command);
   }
 
   @Override
   public void stop() throws RfidConnectionException {
-    try {
-      builder.get().stopReadingTags();
-      LOGGER.info("Leitura finalizada");
-    } catch (BasicReaderException ex) {
-      throw new RfidConnectionException(getConf(), ex);
-    }
+    builder.commands().stopReadingTags();
+    LOGGER.info("Leitura finalizada");
   }
 
   @Override

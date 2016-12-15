@@ -2,10 +2,8 @@ package br.com.devsource.rfid.bri;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Consumer;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 
 import com.intermec.datacollection.rfid.BRIReader;
@@ -17,15 +15,17 @@ import br.com.devsource.rfid.api.RfidConnectionException;
 /**
  * @author Guilherme Pacheco
  */
-class BriReaderBuilder {
+final class BriReaderBuilder {
 
   private final ReaderConf conf;
-  private Optional<BRIReader> briReader = Optional.empty();
-  private List<Consumer<BRIReader>> consumers = new ArrayList<>();
+  private final List<Consumer<BRIReader>> consumers;
+  private final BriCommands commands;
 
-  private static final String TCP = "tcp://";
+  private BRIReader briReader;
 
   public BriReaderBuilder(ReaderConf conf) {
+    commands = new BriCommands(this);
+    consumers = new ArrayList<>();
     Validate.notNull(conf);
     this.conf = conf;
   }
@@ -35,29 +35,47 @@ class BriReaderBuilder {
   }
 
   public BRIReader get() {
-    if (!briReader.isPresent()) {
-      BRIReader reader = create();
-      consumers.forEach(c -> c.accept(reader));
-      briReader = Optional.of(reader);
+    if (briReader == null) {
+      briReader = connect();
     }
-    return briReader.get();
+    return briReader;
   }
 
-  public void ifPresent(Consumer<BRIReader> consumer) {
-    briReader.ifPresent(consumer);
+  private BRIReader connect() {
+    BRIReader reader = create();
+    consumers.forEach(c -> c.accept(reader));
+    return reader;
+  }
+
+  public void execute(String command) {
+    try {
+      get().execute(command);
+    } catch (BasicReaderException ex) {
+      throw new IllegalArgumentException(String.format("Comando BRI: %s, inválido", command));
+    }
+  }
+
+  public BriCommands commands() {
+    return commands;
   }
 
   public void config(Consumer<BRIReader> consumer) {
-    if (briReader.isPresent()) {
-      consumer.accept(briReader.get());
+    if (briReader != null) {
+      consumer.accept(briReader);
     } else {
       consumers.add(consumer);
     }
   }
 
+  public void ifPresent(Consumer<BRIReader> consumer) {
+    if (briReader != null) {
+      consumer.accept(briReader);
+    }
+  }
+
   private BRIReader create() {
     try {
-      String uri = StringUtils.prependIfMissing(conf.getHostname(), TCP);
+      String uri = BriUtils.tpc(conf.getHostname());
       if (conf.getPort() != 0) {
         return new BRIReader(uri, conf.getPort());
       } else {
@@ -67,4 +85,5 @@ class BriReaderBuilder {
       throw new RfidConnectionException(conf, ex);
     }
   }
+
 }

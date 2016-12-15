@@ -2,18 +2,17 @@ package br.com.devsource.rfid.bri;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.BiPredicate;
-
-import org.apache.commons.lang3.mutable.MutableInt;
 
 import com.intermec.datacollection.rfid.GPITrigger;
 
 import br.com.devsource.rfid.api.gpio.GpioStatus;
 
 /**
- * @author Guilherme Pacheco
+ * @author guilherme.pacheco
  */
-class GpiStates {
+final class GpiStates {
 
   private GpiStates() {
     super();
@@ -38,10 +37,8 @@ class GpiStates {
   }
 
   public static int lineState(int number, GpioStatus status) {
-    MutableInt value = new MutableInt(0);
-    STATES.entrySet().stream().filter(e -> e.getValue().test(number, status)).findFirst()
-      .ifPresent(e -> value.setValue(e.getKey()));
-    return value.getValue();
+    return STATES.entrySet().stream().filter(e -> e.getValue().test(number, status)).findFirst()
+      .map(Entry::getKey).orElse(0);
   }
 
 }

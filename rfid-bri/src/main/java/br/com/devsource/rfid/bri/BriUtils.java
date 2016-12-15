@@ -1,7 +1,8 @@
 package br.com.devsource.rfid.bri;
 
-import java.util.Iterator;
 import java.util.Set;
+import java.util.StringJoiner;
+import org.apache.commons.lang3.StringUtils;
 
 import com.intermec.datacollection.rfid.BRIReader;
 
@@ -9,31 +10,27 @@ import br.com.devsource.rfid.api.Antenna;
 import br.com.devsource.rfid.api.ReadCommand;
 import br.com.devsource.rfid.api.ReadMode;
 import br.com.devsource.rfid.api.ReaderConf;
-import br.com.devsource.rfid.api.tag.ReadTagField;
 import br.com.devsource.rfid.core.ReaderUtils;
 
 /**
  * @author Guilherme Pacheco
  */
-class BriUtils {
+final class BriUtils {
 
-  private static final String SEPARATOR = ",";
   private static final int MAX_POWER = 30;
 
   private BriUtils() {
     super();
   }
 
+  public static String tpc(String hostname) {
+    return StringUtils.prependIfMissing(hostname, "tcp://");
+  }
+
   public static String schema(ReadCommand command) {
-    StringBuilder builder = new StringBuilder();
-    Iterator<ReadTagField> iterator = command.getFields().iterator();
-    while (iterator.hasNext()) {
-      builder.append(iterator.next());
-      if (iterator.hasNext()) {
-        builder.append(SEPARATOR);
-      }
-    }
-    return builder.toString();
+    StringJoiner joiner = new StringJoiner(",");
+    command.getFields().forEach(c -> joiner.add(c.name()));
+    return joiner.toString();
   }
 
   public static int operation(ReadCommand command) {
@@ -65,4 +62,5 @@ class BriUtils {
     }
     return potencias;
   }
+
 }

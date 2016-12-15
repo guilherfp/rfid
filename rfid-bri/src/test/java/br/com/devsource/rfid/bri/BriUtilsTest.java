@@ -1,7 +1,7 @@
 package br.com.devsource.rfid.bri;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,6 +36,13 @@ public class BriUtilsTest {
 
     builder.readMode(ReadMode.UNIQUE);
     assertEquals(BRIReader.TagReportOptions.EVENT, BriUtils.operation(builder.build()));
+  }
+
+  @Test
+  public void testTpc() throws Exception {
+    String protocol = BriUtils.tpc("1.2.3.4");
+
+    assertThat(protocol).isEqualTo("tcp://1.2.3.4");
   }
 
 }

@@ -25,4 +25,5 @@ public interface ReaderConf {
   default Set<Antenna> getActivesAntennas() {
     return getAntennas().stream().filter(Antenna::isActive).collect(Collectors.toSet());
   }
+
 }

@@ -12,8 +12,21 @@ public class SimpleAntenna implements Antenna {
   private boolean active;
 
   public SimpleAntenna() {
-    transmitPower = 100;
-    active = true;
+    this(0, true);
+  }
+
+  public SimpleAntenna(int number) {
+    this(number, true);
+  }
+
+  public SimpleAntenna(int number, boolean active) {
+    this(number, active, 100);
+  }
+
+  public SimpleAntenna(int number, boolean active, int transmitPower) {
+    this.number = number;
+    this.transmitPower = transmitPower;
+    this.active = active;
   }
 
   @Override

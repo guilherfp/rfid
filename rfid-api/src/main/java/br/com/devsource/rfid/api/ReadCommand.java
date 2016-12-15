@@ -43,11 +43,12 @@ public class ReadCommand {
 
   public static class ReadCommandBuilder {
 
-    private List<ReadTagField> fields = new ArrayList<>();
-    private ReadMode readMode = ReadMode.UNIQUE;
+    private List<ReadTagField> fields;
+    private ReadMode readMode;
 
     private ReadCommandBuilder() {
-      super();
+      fields = new ArrayList<>();
+      readMode = ReadMode.UNIQUE;
     }
 
     public ReadCommandBuilder fields(List<ReadTagField> fields) {
