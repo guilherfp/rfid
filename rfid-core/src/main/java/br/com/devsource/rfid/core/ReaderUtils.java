@@ -1,7 +1,7 @@
 package br.com.devsource.rfid.core;
 
 /**
- * Classe utilitária para {@link Reader}
+ * Classe utilitária
  * @author guilherme.pacheco
  */
 public final class ReaderUtils {

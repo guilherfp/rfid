@@ -1,7 +1,7 @@
 package br.com.devsource.rfid.all.factory;
 
-import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
+import br.com.devsource.rfid.api.ReaderGpio;
 
 /**
  * @author guilherme.pacheco
@@ -9,6 +9,6 @@ import br.com.devsource.rfid.api.ReaderConf;
 @FunctionalInterface
 public interface ReaderGpioBuilder {
 
-  Reader readerGpio(ReaderConf readerConf);
+  ReaderGpio readerGpio(ReaderConf readerConf);
 
 }

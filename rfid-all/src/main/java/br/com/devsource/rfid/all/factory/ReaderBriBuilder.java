@@ -1,6 +1,5 @@
 package br.com.devsource.rfid.all.factory;
 
-import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
 import br.com.devsource.rfid.api.ReaderGpio;
 import br.com.devsource.rfid.bri.ReaderBri;
@@ -16,8 +15,8 @@ class ReaderBriBuilder implements ReaderBuilder, ReaderGpioBuilder {
   }
 
   @Override
-  public Reader readerGpio(ReaderConf readerConf) {
-    return readerGpio(readerConf);
+  public ReaderGpio readerGpio(ReaderConf readerConf) {
+    return new ReaderBri(readerConf);
   }
 
 }
