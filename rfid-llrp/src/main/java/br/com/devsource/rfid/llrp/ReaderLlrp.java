@@ -17,18 +17,17 @@ import org.slf4j.LoggerFactory;
 
 import br.com.devsource.rfid.api.ConnectionState;
 import br.com.devsource.rfid.api.ReadCommand;
+import br.com.devsource.rfid.api.Reader;
 import br.com.devsource.rfid.api.ReaderConf;
-import br.com.devsource.rfid.api.ReaderGpio;
 import br.com.devsource.rfid.api.RfidConnectionException;
 import br.com.devsource.rfid.api.event.ReadEvent;
 import br.com.devsource.rfid.api.event.ReadHandler;
-import br.com.devsource.rfid.api.gpio.Gpio;
 import br.com.devsource.rfid.core.ReadEventDispatcher;
 
 /**
  * @author Guilherme Pacheco
  */
-public final class ReaderLlrp implements ReaderGpio {
+public final class ReaderLlrp implements Reader {
 
   private final ReaderConf conf;
   private LLRPConnector connector;
@@ -43,7 +42,6 @@ public final class ReaderLlrp implements ReaderGpio {
   public ReaderLlrp(ReaderConf conf) {
     this.conf = conf;
     endPoint = new ReaderEndPoint(this);
-    connector = createConneciton(conf);
     state = ConnectionState.DISCONNECTED;
     capabilities = new Capabilities(this);
     dispatcher = new ReadEventDispatcher();
@@ -66,7 +64,7 @@ public final class ReaderLlrp implements ReaderGpio {
   public void connect() {
     if (state == ConnectionState.DISCONNECTED) {
       try {
-        connector.connect();
+        getConnector().connect();
         capabilities.load();
       } catch (LLRPConnectionAttemptFailedException ex) {
         throw new RfidConnectionException(getConf(), ex);
@@ -74,11 +72,18 @@ public final class ReaderLlrp implements ReaderGpio {
     }
   }
 
+  private LLRPConnector getConnector() {
+    if (connector == null) {
+      connector = createConneciton(conf);
+    }
+    return connector;
+  }
+
   @Override
   public void disconnect() {
     try {
       stop();
-      connector.disconnect();
+      getConnector().disconnect();
       state = ConnectionState.DISCONNECTED;
       connector = null;
     } catch (Exception ex) {
@@ -123,7 +128,7 @@ public final class ReaderLlrp implements ReaderGpio {
   }
 
   LLRPMessage transact(LLRPMessage message) throws TimeoutException {
-    return connector.transact(message, getConf().getTimeOut());
+    return getConnector().transact(message, getConf().getTimeOut());
   }
 
   private void addRoSpec(ReadCommand command) throws TimeoutException {
@@ -180,8 +185,4 @@ public final class ReaderLlrp implements ReaderGpio {
     dispatcher.onRead(event);
   }
 
-  @Override
-  public Gpio getGpio() {
-    throw new UnsupportedOperationException("Operation is not supported");
-  }
 }

@@ -47,7 +47,7 @@ public final class ReaderBri implements ReaderGpio {
 
   @Override
   public void connect() throws RfidConnectionException {
-    if (state.equals(ConnectionState.DISCONNECTED)) {
+    if (ConnectionState.DISCONNECTED.equals(state)) {
       config(builder.get());
       state = ConnectionState.CONNECTED;
     }
