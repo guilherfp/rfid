@@ -84,15 +84,14 @@
     </plugins>
   </build>
 
-  <distributionManagement>
+  <repositories>
     <repository>
-      <id>devsource-releases</id>
-      <url>http://devsource.com.br:8081/nexus/content/repositories/releases</url>
+      <id>devsource-public</id>
+      <url>http://45.32.89.136:8081/repository/maven-public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
     </repository>
-    <snapshotRepository>
-      <id>devsource-snapshots</id>
-      <url>http://devsource.com.br:8081/nexus/content/repositories/snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
+  </repositories>
 
 </project>
